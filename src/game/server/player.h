@@ -123,6 +123,12 @@ private:
 
 	void HandleTuningParams(); //This function will send the new parameters if needed
 
+// Items
+private:
+	int m_Copper;
+	int m_Lead;
+	int m_Coal;
+
 public:
 	CTuningParams* GetNextTuningParams() { return &m_NextTuningParams; };
 };

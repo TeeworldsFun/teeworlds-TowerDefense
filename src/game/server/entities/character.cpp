@@ -802,9 +802,6 @@ void CCharacter::Snap(int SnappingClient)
 	if (!Server()->Translate(Id, SnappingClient))
 		return;
 
-	if(NetworkClipped(SnappingClient))
-		return;
-
 	CNetObj_Character *pCharacter = static_cast<CNetObj_Character *>(Server()->SnapNewItem(NETOBJTYPE_CHARACTER, Id, sizeof(CNetObj_Character)));
 	if(!pCharacter)
 		return;

@@ -55,6 +55,7 @@ class CGameContext : public IGameServer
 	CCollision m_Collision;
 	CNetObjHandler m_NetObjHandler;
 	CTuningParams m_Tuning;
+	IGameController *m_pGameController;
 
 	static void ConsoleOutputCallback_Chat(const char *pStr, void *pUser);
 
@@ -97,6 +98,7 @@ public:
 	CCollision *Collision() { return &m_Collision; }
 	CTuningParams *Tuning() { return &m_Tuning; }
 	virtual class CLayers *Layers() { return &m_Layers; }
+	IGameController *GameController() const { return m_pGameController; }
 
 	CGameContext();
 	~CGameContext();

@@ -9,6 +9,7 @@
 #include "gamecontroller.h"
 #include "gamecontext.h"
 
+#include "entities/tower-defense/tower.h"
 
 IGameController::IGameController(class CGameContext *pGameServer)
 {
@@ -134,34 +135,15 @@ bool IGameController::OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P1, 
 
 	if(str_comp(pName, "spawn") == 0)
 		m_aaSpawnPoints[0][m_aNumSpawnPoints[0]++] = Pos;
-	else if(str_comp(pName, "spawnRed") == 0)
+	else if(str_comp(pName, "redSpawn") == 0)
 		m_aaSpawnPoints[1][m_aNumSpawnPoints[1]++] = Pos;
-	else if(str_comp(pName, "spawnBlue") == 0)
+	else if(str_comp(pName, "blueSpawn") == 0)
 		m_aaSpawnPoints[2][m_aNumSpawnPoints[2]++] = Pos;
-	else if(str_comp(pName, "armor") == 0)
-		Type = POWERUP_ARMOR;
-	else if(str_comp(pName, "health") == 0)
-		Type = POWERUP_HEALTH;
-	else if(str_comp(pName, "shotgun") == 0)
-	{
-		Type = POWERUP_WEAPON;
-		SubType = WEAPON_SHOTGUN;
-	}
-	else if(str_comp(pName, "grenade") == 0)
-	{
-		Type = POWERUP_WEAPON;
-		SubType = WEAPON_GRENADE;
-	}
-	else if(str_comp(pName, "rifle") == 0)
-	{
-		Type = POWERUP_WEAPON;
-		SubType = WEAPON_RIFLE;
-	}
-	else if(str_comp(pName, "ninja") == 0 && g_Config.m_SvPowerups)
-	{
-		Type = POWERUP_NINJA;
-		SubType = WEAPON_NINJA;
-	}
+
+	else if(str_comp(pName, "redTower") == 0)
+		new CTower(&GameServer()->m_World, Pos, TEAM_RED);
+	else if(str_comp(pName, "blueTower") == 0)
+		new CTower(&GameServer()->m_World, Pos, TEAM_BLUE);
 
 	if(Type != -1)
 	{

@@ -155,6 +155,12 @@ public:
 	virtual void PostReset();
 
 	double GetTime();
+
+// Items
+public:
+	int m_Copper[2];
+	int m_Lead[2];
+	int m_Coal[2];
 };
 
 #endif

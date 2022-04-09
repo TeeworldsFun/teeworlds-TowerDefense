@@ -32,9 +32,6 @@ void CFlag::TickPaused()
 
 void CFlag::Snap(int SnappingClient)
 {
-	if(NetworkClipped(SnappingClient))
-		return;
-
 	CNetObj_Flag *pFlag = (CNetObj_Flag *)Server()->SnapNewItem(NETOBJTYPE_FLAG, m_Team, sizeof(CNetObj_Flag));
 	if(!pFlag)
 		return;
