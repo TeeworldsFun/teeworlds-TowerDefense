@@ -112,7 +112,7 @@ bool CLocalization::CLanguage::Load(CLocalization* pLocalization, CStorage* pSto
 {
 	// read file data into buffer
 	char aBuf[256];
-	str_format(aBuf, sizeof(aBuf), "./server_lang/%s.json", m_aFilename);
+	str_format(aBuf, sizeof(aBuf), "server_lang/%s.json", m_aFilename);
 	
 	IOHANDLE File = pStorage->OpenFile(aBuf, IOFLAG_READ, CStorage::TYPE_ALL);
 	if(!File)
@@ -309,11 +309,11 @@ bool CLocalization::Init()
 	}
 	
 	// read file data into buffer
-	const char *pFilename = "./server_lang/index.json";
+	const char *pFilename = "server_lang/index.json";
 	IOHANDLE File = Storage()->OpenFile(pFilename, IOFLAG_READ, CStorage::TYPE_ALL);
 	if(!File)
 	{
-		dbg_msg("Localization", "can't open 'server_lang/index.json'");
+		dbg_msg("Localization", "can't open server_lang/index.json");
 		return true; //return true because it's not a critical error
 	}
 	
@@ -404,179 +404,6 @@ bool CLocalization::PreUpdate()
 	return true;
 }
 
-const char *CLocalization::LanguageCodeByCountryCode(int CountryCode)
-{
-	// Constants from 'data/countryflags/index.txt'
-	switch(CountryCode)
-	{
-		/* ar - Arabic ************************************/
-		case 12: //Algeria
-		case 48: //Bahrain
-		case 262: //Djibouti
-		case 818: //Egypt
-		case 368: //Iraq
-		case 400: //Jordan
-		case 414: //Kuwait
-		case 422: //Lebanon
-		case 434: //Libya
-		case 478: //Mauritania
-		case 504: //Morocco
-		case 512: //Oman
-		case 275: //Palestine
-		case 634: //Qatar
-		case 682: //Saudi Arabia
-		case 706: //Somalia
-		case 729: //Sudan
-		case 760: //Syria
-		case 788: //Tunisia
-		case 784: //United Arab Emirates
-		case 887: //Yemen
-			return "ar";
-		/* bg - Bosnian *************************************/
-		case 100: //Bulgaria
-			return "bg";
-		/* bs - Bosnian *************************************/
-		case 70: //Bosnia and Hercegovina
-			return "bs";
-		/* cs - Czech *************************************/
-		case 203: //Czechia
-			return "cs";
-		/* de - German ************************************/
-		case 40: //Austria
-		case 276: //Germany
-		case 438: //Liechtenstein
-		case 756: //Switzerland
-			return "de";
-		/* el - Greek ***********************************/
-		case 300: //Greece
-		case 196: //Cyprus
-			return "el";
-		/* es - Spanish ***********************************/
-		case 32: //Argentina
-		case 68: //Bolivia
-		case 152: //Chile
-		case 170: //Colombia
-		case 188: //Costa Rica
-		case 192: //Cuba
-		case 214: //Dominican Republic
-		case 218: //Ecuador
-		case 222: //El Salvador
-		case 226: //Equatorial Guinea
-		case 320: //Guatemala
-		case 340: //Honduras
-		case 484: //Mexico
-		case 558: //Nicaragua
-		case 591: //Panama
-		case 600: //Paraguay
-		case 604: //Peru
-		case 630: //Puerto Rico
-		case 724: //Spain
-		case 858: //Uruguay
-		case 862: //Venezuela
-			return "es";
-		/* fa - Farsi ************************************/
-		case 364: //Islamic Republic of Iran
-		case 4: //Afghanistan
-			return "fa";
-		/* fr - French ************************************/
-		case 204: //Benin
-		case 854: //Burkina Faso
-		case 178: //Republic of the Congo
-		case 384: //Cote d’Ivoire
-		case 266: //Gabon
-		case 324: //Ginea
-		case 466: //Mali
-		case 562: //Niger
-		case 686: //Senegal
-		case 768: //Togo
-		case 250: //France
-		case 492: //Monaco
-			return "fr";
-		/* hr - Croatian **********************************/
-		case 191: //Croatia
-			return "hr";
-		/* hu - Hungarian *********************************/
-		case 348: //Hungary
-			return "hu";
-		/* it - Italian ***********************************/
-		case 380: //Italy
-			return "it";
-		/* ja - Japanese **********************************/
-		case 392: //Japan
-			return "ja";
-		/* la - Latin *************************************/
-		case 336: //Vatican
-			return "la";
-		/* nl - Dutch *************************************/
-		case 533: //Aruba
-		case 531: //Curaçao
-		case 534: //Sint Maarten
-		case 528: //Netherland
-		case 740: //Suriname
-		case 56: //Belgique
-			return "nl";
-		/* pl - Polish *************************************/
-		case 616: //Poland
-			return "pl";
-		/* pt - Portuguese ********************************/
-		case 24: //Angola
-		case 76: //Brazil
-		case 132: //Cape Verde
-		//case 226: //Equatorial Guinea: official language, but not national language
-		//case 446: //Macao: official language, but spoken by less than 1% of the population
-		case 508: //Mozambique
-		case 626: //Timor-Leste
-		case 678: //São Tomé and Príncipe
-			return "pt";
-		/* ru - Russian ***********************************/
-		case 112: //Belarus
-		case 643: //Russia
-		case 398: //Kazakhstan
-			return "ru";
-		/* sk - Slovak ************************************/
-		case 703: //Slovakia
-			return "sk";
-		/* sr - Serbian ************************************/
-		case 688: //Serbia
-			return "sr";
-		/* tl - Tagalog ************************************/
-		case 608: //Philippines
-			return "tl";
-		/* tr - Turkish ************************************/
-		case 31: //Azerbaijan
-		case 792: //Turkey
-			return "tr";
-		/* uk - Ukrainian **********************************/
-		case 804: //Ukraine
-			return "uk";
-		/* zh-Hans - Chinese (Simplified) **********************************/
-		case 156: //People’s Republic of China
-		case 344: //Hong Kong
-		case 446: //Macau
-			return "zh-Hans";
-		case 826: // United Kingdom of Great Britain and Northern Ireland
-		case 840: // United States of America
-			return "en";
-		default:
-			return "";
-	}
-}
-
-const char *CLocalization::FallbackLanguageForIpCountryCode(int Country)
-{
-	switch (Country) {
-	case 364: //Islamic Republic of Iran
-	case 4: //Afghanistan
-		return "fa";
-	case 112: //Belarus
-	case 643: //Russia
-	case 398: //Kazakhstan
-		return "ru";
-	default:
-		return "en";
-	}
-}
-
 const char* CLocalization::LocalizeWithDepth(const char* pLanguageCode, const char* pText, int Depth)
 {
 	CLanguage* pLanguage = m_pMainLanguage;
@@ -650,22 +477,21 @@ const char* CLocalization::Localize_P(const char* pLanguageCode, int Number, con
 void CLocalization::AppendNumber(dynamic_string& Buffer, int& BufferIter, CLanguage* pLanguage, int Number)
 {
 	UChar aBufUtf16[128];
-
+	
 	UErrorCode Status = U_ZERO_ERROR;
-	unum_format(pLanguage->m_pNumberFormater, Number, aBufUtf16, sizeof(aBufUtf16), nullptr, &Status);
-
+	unum_format(pLanguage->m_pNumberFormater, Number, aBufUtf16, sizeof(aBufUtf16), NULL, &Status);
 	if(U_FAILURE(Status))
 		BufferIter = Buffer.append_at(BufferIter, "_NUMBER_");
 	else
 	{
-		// update buffer size
-		const int SrcLength = u_strlen(aBufUtf16);
-		const int NeededSize = UCNV_GET_MAX_BYTES_FOR_STRING(SrcLength, ucnv_getMaxCharSize(m_pUtf8Converter));
-
+		//Update buffer size
+		int SrcLength = u_strlen(aBufUtf16);
+		int NeededSize = UCNV_GET_MAX_BYTES_FOR_STRING(SrcLength, ucnv_getMaxCharSize(m_pUtf8Converter));
+		
 		while(Buffer.maxsize() - BufferIter <= NeededSize)
 			Buffer.resize_buffer(Buffer.maxsize()*2);
-
-		const int Length = ucnv_fromUChars(m_pUtf8Converter, Buffer.buffer()+BufferIter, Buffer.maxsize() - BufferIter, aBufUtf16, SrcLength, &Status);
+		
+		int Length = ucnv_fromUChars(m_pUtf8Converter, Buffer.buffer()+BufferIter, Buffer.maxsize() - BufferIter, aBufUtf16, SrcLength, &Status);
 		if(U_FAILURE(Status))
 			BufferIter = Buffer.append_at(BufferIter, "_NUMBER_");
 		else
@@ -790,17 +616,7 @@ void CLocalization::Format_V(dynamic_string& Buffer, const char* pLanguageCode, 
 						}
 						else if(str_comp_num("int:", pText+ParamTypeStart, 4) == 0)
 						{
-							int Number = *((int*) pVarArgValue);
-							AppendNumber(Buffer, BufferIter, pLanguage, Number);
-						}
-						else if(str_comp_num("ullint:", pText+ParamTypeStart, 4) == 0)
-						{
-							int Number = *((const unsigned long long int*) pVarArgValue);
-							AppendNumber(Buffer, BufferIter, pLanguage, Number);
-						}
-						else if(str_comp_num("uint:", pText+ParamTypeStart, 4) == 0)
-						{
-							int Number = *((const unsigned int*) pVarArgValue);
+							int Number = *((const int*) pVarArgValue);
 							AppendNumber(Buffer, BufferIter, pLanguage, Number);
 						}
 						else if(str_comp_num("percent:", pText+ParamTypeStart, 4) == 0)

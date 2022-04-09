@@ -52,10 +52,7 @@ public:
 	public:
 		virtual void OnLocalizationModified() = 0;
 	};
-
-	static const char *LanguageCodeByCountryCode(int country);
-	static const char *FallbackLanguageForIpCountryCode(int Country);
-
+	
 	class CLanguage
 	{
 	protected:

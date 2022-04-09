@@ -45,7 +45,6 @@ function DuplicateDirectoryStructure(orgpath, srcpath, dstpath)
 		DuplicateDirectoryStructure(orgpath, v, dstpath)
 	end
 end
-
 DuplicateDirectoryStructure("src", "src", "objs")
 ]]
 
@@ -128,8 +127,6 @@ if family == "windows" then
 			table.insert(icu_depends, CopyToDirectory(".", "other/icu/gcc/lib64/icuuc53.dll"))
 		end
 	end
-	table.insert(server_sql_depends, CopyToDirectory(".", "other/mysql/vc2005libs/mysqlcppconn.dll"))
-	table.insert(server_sql_depends, CopyToDirectory(".", "other/mysql/vc2005libs/libmysql.dll"))
 
 	if config.compiler.driver == "cl" then
 		server_link_other = {ResCompile("other/icons/teeworlds_srv_cl.rc")}
