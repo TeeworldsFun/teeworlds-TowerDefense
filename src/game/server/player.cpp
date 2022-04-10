@@ -73,8 +73,6 @@ void CPlayer::Tick()
 		return;
 
 	if(m_InBase)
-		GameServer()->SendBroadcast(_("asdkjal"), m_ClientID);
-	if(m_InBase)
 	{
 		if(m_Copper)
 		{	GameServer()->m_pController->m_Copper[GetTeam()]+=m_Copper;	m_Copper = 0;}

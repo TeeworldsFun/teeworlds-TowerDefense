@@ -136,7 +136,6 @@ void CTower::Tick()
         }
         else
         {
-            dbg_msg("s","%f",distance(m_Pos, GameServer()->m_apPlayers[i]->GetCharacter()->m_Pos));
             m_pPlayer->m_InBase = false;
         }
     }
