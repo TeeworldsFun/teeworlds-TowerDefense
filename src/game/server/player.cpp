@@ -129,8 +129,19 @@ void CPlayer::Tick()
 	{
 		switch (m_CraftingType)
 		{
+		case CRAFTTYPE_COPPER:
+			m_Copper++;
+			SendCraftBroadcast("Copper");
+			break;
+
+		case CRAFTTYPE_LEAD:
+			m_Lead++;
+			SendCraftBroadcast("Lead");
+			break;
+
 		case CRAFTTYPE_COAL:
-			
+			m_Coal++;
+			SendCraftBroadcast("Coal");
 			break;
 		
 		default:
@@ -368,4 +379,9 @@ const char* CPlayer::GetLanguage()
 void CPlayer::SetLanguage(const char* pLanguage)
 {
 	str_copy(m_aLanguage, pLanguage, sizeof(m_aLanguage));
+}
+
+void CPlayer::SendCraftBroadcast(const char* CraftType)
+{
+	GameServer()->SendBroadcast(_("Crafting...\n {str:CraftType} +1"), m_ClientID, "CraftType", CraftType);
 }

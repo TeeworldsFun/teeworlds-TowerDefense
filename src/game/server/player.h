@@ -103,7 +103,10 @@ public:
 
 	int m_Authed;
 
+// Craft
+public:
 	int m_CraftingType;
+	void SendCraftBroadcast(const char* CraftType);
 private:
 	CCharacter *m_pCharacter;
 	CGameContext *m_pGameServer;
