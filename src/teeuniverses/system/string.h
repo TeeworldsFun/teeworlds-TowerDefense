@@ -20,7 +20,6 @@
 /* BEGIN EDIT *********************************************************/
 #include <base/math.h>
 /* END EDIT ***********************************************************/
-#include <base/system.h>
 
 //String contained in a fixed length array
 template<int SIZE>
@@ -148,7 +147,7 @@ public:
 		
 		str_append(m_pBuffer+Pos, pBuffer, m_MaxSize-Pos);
 		
-		return minimum(Pos + BufferSize, m_MaxSize-1);
+		return min(Pos + BufferSize, m_MaxSize-1);
 	}
 	
 	inline int append_at_num(int Pos, const char* pBuffer, int Num)
@@ -165,7 +164,7 @@ public:
 		
 		str_append_num(m_pBuffer+Pos, pBuffer, m_MaxSize-Pos, Num);
 		
-		return minimum(Pos + Num, m_MaxSize-1);
+		return min(Pos + Num, m_MaxSize-1);
 	}
 };
 
