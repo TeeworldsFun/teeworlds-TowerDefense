@@ -332,6 +332,32 @@ void CGameContext::SendBroadcast(const char *pText, int ClientID, ...)
 	va_end(VarArgs);
 }
 
+void CGameContext::SendBroadcast_VL(int ClientID, const char *pText, ...)
+{
+	int Start = (ClientID < 0 ? 0 : ClientID);
+	int End = (ClientID < 0 ? MAX_CLIENTS : ClientID+1);
+	char aBuf[256];
+	
+	dynamic_string Buffer;
+	
+	va_list VarArgs;
+	va_start(VarArgs, pText);
+
+	for(int i = Start; i < End; i++)
+	{
+		if(m_apPlayers[i])
+		{
+			Buffer.clear();
+			Server()->Localization()->Format_VL(Buffer, m_apPlayers[i]->GetLanguage(), pText, VarArgs);
+			CNetMsg_Sv_Broadcast Msg;
+			Msg.m_pMessage = Buffer.buffer();
+			Server()->SendPackMsg(&Msg, MSGFLAG_VITAL, ClientID);
+		}
+	}
+	
+	va_end(VarArgs);
+}
+
 //
 void CGameContext::StartVote(const char *pDesc, const char *pCommand, const char *pReason)
 {

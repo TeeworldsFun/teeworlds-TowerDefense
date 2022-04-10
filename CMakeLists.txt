@@ -24,9 +24,9 @@ endif()
 if(POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
   if(VERSION_PATCH STREQUAL "0")
-    project(InfclassR VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
+    project(Teeindustry VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
   else()
-    project(InfclassR VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+    project(Teeindustry VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
   endif()
 else()
   project(DDNet)
@@ -108,7 +108,7 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
   src/game/version.h
 )
 
-set(SERVER_EXECUTABLE Infclass-Server CACHE STRING "Name of the built server executable")
+set(SERVER_EXECUTABLE Teeindustry-Server CACHE STRING "Name of the built server executable")
 
 ########################################################################
 # Compiler flags
@@ -340,7 +340,7 @@ if(TARGET_OS AND TARGET_OS STREQUAL "mac")
   find_program(HDIUTIL hdiutil)
 endif()
 
-message(STATUS "******** Teedustry ********")
+message(STATUS "******** Teeindustry ********")
 message(STATUS "Target OS: ${TARGET_OS} ${TARGET_BITS}bit")
 message(STATUS "Compiler: ${CMAKE_CXX_COMPILER}")
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
@@ -724,7 +724,7 @@ add_executable(${TARGET_SERVER}
   $<TARGET_OBJECTS:engine-shared>
   $<TARGET_OBJECTS:game-shared>
 )
-set_property(TARGET Infclass-Server PROPERTY CXX_STANDARD 11)
+set_property(TARGET Teeindustry-Server PROPERTY CXX_STANDARD 11)
 target_link_libraries(${TARGET_SERVER} ${LIBS_SERVER})
 list(APPEND TARGETS_OWN ${TARGET_SERVER})
 list(APPEND TARGETS_LINK ${TARGET_SERVER})

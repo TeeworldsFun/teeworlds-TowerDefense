@@ -21,6 +21,8 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_SpectatorID = SPEC_FREEVIEW;
 	m_LastActionTick = Server()->Tick();
 	m_TeamChangeTick = Server()->Tick();
+	m_MineTick == 0;
+	m_MiningType == CRAFTTYPE_NONE;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
 	m_Authed = IServer::AUTHED_NO;
@@ -125,28 +127,43 @@ void CPlayer::Tick()
 		++m_TeamChangeTick;
  	}
 
-	if(m_CraftingType && GetCharacter()->GetCraftTick()%50 == 0)
+	if(m_MiningType && m_MineTick >= 50)
 	{
-		switch (m_CraftingType)
+		switch (m_MiningType)
 		{
 		case CRAFTTYPE_COPPER:
 			m_Copper++;
-			SendCraftBroadcast("Copper");
+			SendMineBroadcast("Copper");
+			m_MineTick = 0;
 			break;
 
 		case CRAFTTYPE_LEAD:
 			m_Lead++;
-			SendCraftBroadcast("Lead");
+			SendMineBroadcast("Lead");
+			m_MineTick = 0;
 			break;
 
 		case CRAFTTYPE_COAL:
 			m_Coal++;
-			SendCraftBroadcast("Coal");
+			SendMineBroadcast("Coal");
+			m_MineTick = 0;
 			break;
 		
 		default:
 			break;
 		}
+	}
+
+	if(m_InBase)
+	{
+		if(m_Copper)
+		{	GameServer()->m_pController->m_Copper[GetTeam()]+=m_Copper;	m_Copper = 0;}
+
+		if(m_Lead)
+		{	GameServer()->m_pController->m_Lead[GetTeam()]+=m_Lead;	m_Lead = 0;}
+
+		if(m_Coal)
+		{	GameServer()->m_pController->m_Coal[GetTeam()]+=m_Coal;	m_Coal = 0;}
 	}
 	HandleTuningParams();
 }
@@ -381,7 +398,8 @@ void CPlayer::SetLanguage(const char* pLanguage)
 	str_copy(m_aLanguage, pLanguage, sizeof(m_aLanguage));
 }
 
-void CPlayer::SendCraftBroadcast(const char* CraftType)
+void CPlayer::SendMineBroadcast(char* CraftType)
 {
-	GameServer()->SendBroadcast(_("Crafting...\n {str:CraftType} +1"), m_ClientID, "CraftType", CraftType);
+//	str_format(CraftType, sizeof(CraftType), "%s", GameServer()->Server()->Localization()->Localize(GetLanguage(), CraftType));
+	GameServer()->SendBroadcast_VL(m_ClientID, _("Mining...\n \n{str:CraftType}: {int:MineNum}/100"), "CraftType", GameServer()->Server()->Localization()->Localize(GetLanguage(), CraftType), "MineNum", GetMineNum(m_MiningType), NULL);
 }

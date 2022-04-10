@@ -6,6 +6,7 @@
 // this include should perhaps be removed
 #include "entities/character.h"
 #include "gamecontext.h"
+#include "CraftingType.h"
 
 // player object
 class CPlayer
@@ -105,8 +106,53 @@ public:
 
 // Craft
 public:
-	int m_CraftingType;
-	void SendCraftBroadcast(const char* CraftType);
+	int m_MineTick;
+	int m_MiningType;
+	bool m_InBase;
+	void SendMineBroadcast(char* CraftType);
+	const char *GetMineName()
+	{
+		switch (m_MiningType)
+		{
+		case CRAFTTYPE_COPPER:
+			return "Copper";
+			break;
+		
+		case CRAFTTYPE_LEAD:
+			return "Lead";
+			break;
+
+		case CRAFTTYPE_COAL:
+			return "Coal";
+			break;
+		
+		default:
+			break;
+		}
+	}
+
+	int *GetMineNum(int MineType)
+	{
+		switch (MineType)
+		{
+		case CRAFTTYPE_COPPER:
+			return &m_Copper;
+			break;
+		
+		case CRAFTTYPE_LEAD:
+			return &m_Lead;
+			break;
+
+		case CRAFTTYPE_COAL:
+			return &m_Coal;
+			break;
+		
+		default:
+			break;
+		}
+
+		return 0;
+	}
 private:
 	CCharacter *m_pCharacter;
 	CGameContext *m_pGameServer;

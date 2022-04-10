@@ -16,7 +16,7 @@
 #define GAME_NETVERSION "0.6 626fce9a778df4d4"
 #define LAST_COMPILE_DATE __DATE__
 
-#define MOD_NAME "Tower Defense - Teedustry"
+#define MOD_NAME "Tower Defense - Teeindustry"
 #define MOD_VERSION "0.0.1"
 #define MOD_AUTHORS "FlowerFell-Sans"
 #define MOD_CREDITS "FlowerFell-Sans"

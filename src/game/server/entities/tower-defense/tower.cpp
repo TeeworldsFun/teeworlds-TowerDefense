@@ -1,5 +1,6 @@
 #include "tower.h"
 #include <game/server/gamecontext.h>
+#include <game/server/player.h>
 #include <new>
 
 #define PickupPhysSizeS 14
@@ -99,17 +100,48 @@ void CTower::Tick()
         if(!GameServer()->m_apPlayers[i]->GetCharacter())
             return;
 
+        CCharacter *Character = GameServer()->m_apPlayers[i]->GetCharacter();
+        CPlayer *m_pPlayer = GameServer()->m_apPlayers[i];
+        
         if(distance(GameServer()->m_apPlayers[i]->GetCharacter()->m_Pos, m_Pos) < 200)
         {
-            InTowerTick[i]++;
-            if(InTowerTick[i]%150 == 0)
+            if(GameServer()->m_apPlayers[i]->GetTeam() == m_Team)
             {
-                InTowerTick[i] = 0;
-                
+                InTowerTick[i]++;
+                if(InTowerTick[i]%50 == 0)
+                {
+                    int Copper = GameServer()->m_pController->m_Copper[m_Team];
+                    int Lead = GameServer()->m_pController->m_Lead[m_Team];
+                    int Coal = GameServer()->m_pController->m_Coal[m_Team];
+                    InTowerTick[i] = 0;
+                    GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseHealth(1);
+                    GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseArmor(1);
+
+                    GameServer()->SendBroadcast_VL(i, _("~~~ Tower ~~~\n\nMines:\nCopper: {int:copper}\nLead: {int:lead}\nCoal: {int:coal}"), 
+                    "copper", &Copper, 
+                    "lead", &Lead, 
+                    "coal", &Coal, NULL);
+                }
+
+                m_pPlayer->m_InBase = true;
+            }
+            else
+            {  
+                m_pPlayer->m_InBase = false;
+                TakeDamage(5);
+                m_pPlayer->m_Score++;
+                Character->Die(-1, WEAPON_WORLD);
             }
         }
+        else
+            m_pPlayer->m_InBase = false;
     }
     LevelUpgrade();
+}
+
+void CTower::TakeDamage(int Dmg)
+{
+    m_Health -= Dmg;
 }
 
 void CTower::Snap(int SnappingClient)
@@ -180,7 +212,11 @@ void CTower::Snap(int SnappingClient)
     if(!pFlag)
         return;
 
-    pFlag->m_Team = TEAM_BLUE;
+    if(m_Team == TEAM_BLUE)
+        pFlag->m_Team = TEAM_BLUE;
+    else
+        pFlag->m_Team = TEAM_RED;
+    
     pFlag->m_X = m_Pos.x;
     pFlag->m_Y = m_Pos.y;
 }

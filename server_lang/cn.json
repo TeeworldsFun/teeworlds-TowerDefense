@@ -8,5 +8,65 @@
             "key": "Available languages: {str:ListOfLanguage}",
             "value": "可用语言: {str:ListOfLanguage}"
         },
+        {
+            "key": "Copper",
+            "value": "铜矿"
+        },
+        {
+            "key": "Lead",
+            "value": "铅矿"
+        },
+        {
+            "key": "Coal",
+            "value": "煤矿"
+        },
+        {
+            "key": "Mining...\n \n{str:CraftType}: {int:MineNum}/100",
+            "value": "挖矿中...\n\n\n{str:CraftType}: {int:MineNum}/100"
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        },
+        {
+            "key": "",
+            "value": ""
+        }
     ]
 }

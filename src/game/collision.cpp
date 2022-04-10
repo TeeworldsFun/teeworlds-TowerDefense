@@ -214,13 +214,13 @@ void CCollision::Init(class CLayers *pLayers)
 
 		// Crafts..
 		case TILE_COPPER:
-			m_pTiles[i].m_Index = CRAFT_COPPER;
+			m_pTiles[i].m_Index = MINECOPPER;
 			break;
 		case TILE_LEAD:
-			m_pTiles[i].m_Index = CRAFT_LEAD;
+			m_pTiles[i].m_Index = MINELEAD;
 			break;
 		case TILE_COAL:
-			m_pTiles[i].m_Index = CRAFT_COAL;
+			m_pTiles[i].m_Index = MINECOAL;
 			break;
 		default:
 			m_pTiles[i].m_Index = 0;

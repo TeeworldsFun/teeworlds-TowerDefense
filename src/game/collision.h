@@ -30,9 +30,9 @@ public:
 
 	enum
 	{
-		CRAFT_COPPER=8,
-		CRAFT_LEAD=16,
-		CRAFT_COAL=32,
+		MINECOPPER=8,
+		MINELEAD=16,
+		MINECOAL=32,
 	};
 
 	CCollision();

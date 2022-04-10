@@ -552,13 +552,19 @@ void CCharacter::Tick()
 	int Index = GameServer()->Collision()->GetCollisionAt(m_Pos.x-m_ProximityRadius/3.f, m_Pos.y+m_ProximityRadius/3.f);
 	switch (Index)
 	{
-	case CCollision::CRAFT_COPPER:
-		m_CraftTick++;
-		if(m_CraftTick%50 == 0)
-		{
-			m_CraftTick = 0;
-			GetPlayer()->m_CraftingType == CRAFTTYPE_COPPER;
-		}
+	case CCollision::MINECOPPER:
+		GetPlayer()->m_MiningType = CRAFTTYPE_COPPER;
+		GetPlayer()->m_MineTick++;
+		break;
+	
+	case CCollision::MINELEAD:
+		GetPlayer()->m_MiningType = CRAFTTYPE_LEAD;
+		GetPlayer()->m_MineTick++;
+		break;
+	
+	case CCollision::MINECOAL:
+		GetPlayer()->m_MiningType = CRAFTTYPE_COAL;
+		GetPlayer()->m_MineTick++;
 		break;
 	
 	default:
