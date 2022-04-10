@@ -103,10 +103,12 @@ void CTower::Tick()
         CCharacter *Character = GameServer()->m_apPlayers[i]->GetCharacter();
         CPlayer *m_pPlayer = GameServer()->m_apPlayers[i];
         
-        if(distance(GameServer()->m_apPlayers[i]->GetCharacter()->m_Pos, m_Pos) < 200)
+        if(distance(m_Pos, GameServer()->m_apPlayers[i]->GetCharacter()->m_Pos) < 230)
         {
+            GameServer()->m_apPlayers[i]->m_InBase = true;
             if(GameServer()->m_apPlayers[i]->GetTeam() == m_Team)
             {
+                GameServer()->m_apPlayers[i]->m_InBase = true;
                 InTowerTick[i]++;
                 if(InTowerTick[i]%50 == 0)
                 {
@@ -117,16 +119,15 @@ void CTower::Tick()
                     GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseHealth(1);
                     GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseArmor(1);
 
-                    GameServer()->SendBroadcast_VL(i, _("~~~ Tower ~~~\n\nMines:\nCopper: {int:copper}\nLead: {int:lead}\nCoal: {int:coal}"), 
+                    GameServer()->SendBroadcast_VL(i, _("~~~ Tower ~~~\nTeam: {str:Team}\nMines:\nCopper: {int:copper}\nLead: {int:lead}\nCoal: {int:coal}"), 
+                    "Team", m_Team ? "Blue" : "Red",
                     "copper", &Copper, 
                     "lead", &Lead, 
                     "coal", &Coal, NULL);
                 }
-
-                m_pPlayer->m_InBase = true;
             }
             else
-            {  
+            {
                 m_pPlayer->m_InBase = false;
                 TakeDamage(5);
                 m_pPlayer->m_Score++;
@@ -134,7 +135,10 @@ void CTower::Tick()
             }
         }
         else
+        {
+            dbg_msg("s","%f",distance(m_Pos, GameServer()->m_apPlayers[i]->GetCharacter()->m_Pos));
             m_pPlayer->m_InBase = false;
+        }
     }
     LevelUpgrade();
 }

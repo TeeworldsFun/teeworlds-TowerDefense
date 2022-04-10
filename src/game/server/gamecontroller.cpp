@@ -141,17 +141,16 @@ bool IGameController::OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P1, 
 	int Type = -1;
 	int SubType = 0;
 
-	if(str_comp(pName, "spawn") == 0)
-		m_aaSpawnPoints[0][m_aNumSpawnPoints[0]++] = Pos;
-	else if(str_comp(pName, "redSpawn") == 0)
-		m_aaSpawnPoints[1][m_aNumSpawnPoints[1]++] = Pos;
-	else if(str_comp(pName, "blueSpawn") == 0)
-		m_aaSpawnPoints[2][m_aNumSpawnPoints[2]++] = Pos;
-
-	else if(str_comp(pName, "redTower") == 0)
+	if(str_comp(pName, "redTower") == 0)
+	{
 		new CTower(&GameServer()->m_World, Pos, TEAM_RED);
+		m_aaSpawnPoints[1][m_aNumSpawnPoints[1]++] = Pos;
+	}
 	else if(str_comp(pName, "blueTower") == 0)
+	{
 		new CTower(&GameServer()->m_World, Pos, TEAM_BLUE);
+		m_aaSpawnPoints[2][m_aNumSpawnPoints[2]++] = Pos;
+	}
 
 	if(Type != -1)
 	{

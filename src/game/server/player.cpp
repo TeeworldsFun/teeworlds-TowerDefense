@@ -23,6 +23,7 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_TeamChangeTick = Server()->Tick();
 	m_MineTick == 0;
 	m_MiningType == CRAFTTYPE_NONE;
+	m_InBase == false;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
 	m_Authed = IServer::AUTHED_NO;
@@ -70,6 +71,20 @@ void CPlayer::Tick()
 #endif
 	if(!Server()->ClientIngame(m_ClientID))
 		return;
+
+	if(m_InBase)
+		GameServer()->SendBroadcast(_("asdkjal"), m_ClientID);
+	if(m_InBase)
+	{
+		if(m_Copper)
+		{	GameServer()->m_pController->m_Copper[GetTeam()]+=m_Copper;	m_Copper = 0;}
+
+		if(m_Lead)
+		{	GameServer()->m_pController->m_Lead[GetTeam()]+=m_Lead;	m_Lead = 0;}
+
+		if(m_Coal)
+		{	GameServer()->m_pController->m_Coal[GetTeam()]+=m_Coal;	m_Coal = 0;}
+	}
 
 	Server()->SetClientScore(m_ClientID, m_Score);
 	Server()->SetClientLanguage(m_ClientID, m_aLanguage);
@@ -152,18 +167,6 @@ void CPlayer::Tick()
 		default:
 			break;
 		}
-	}
-
-	if(m_InBase)
-	{
-		if(m_Copper)
-		{	GameServer()->m_pController->m_Copper[GetTeam()]+=m_Copper;	m_Copper = 0;}
-
-		if(m_Lead)
-		{	GameServer()->m_pController->m_Lead[GetTeam()]+=m_Lead;	m_Lead = 0;}
-
-		if(m_Coal)
-		{	GameServer()->m_pController->m_Coal[GetTeam()]+=m_Coal;	m_Coal = 0;}
 	}
 	HandleTuningParams();
 }
@@ -382,6 +385,7 @@ void CPlayer::TryRespawn()
 	if(!GameServer()->m_pController->CanSpawn(m_Team, &SpawnPos))
 		return;
 
+	m_InBase = false;
 	m_Spawning = false;
 	m_pCharacter = new(m_ClientID) CCharacter(&GameServer()->m_World);
 	m_pCharacter->Spawn(this, SpawnPos);
