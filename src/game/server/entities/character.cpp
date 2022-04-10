@@ -3,6 +3,7 @@
 #include <new>
 #include <engine/shared/config.h>
 #include <game/server/gamecontext.h>
+#include <game/server/CraftingType.h>
 #include <game/mapitems.h>
 
 #include "character.h"
@@ -546,6 +547,22 @@ void CCharacter::Tick()
 		GameLayerClipped(m_Pos))
 	{
 		Die(m_pPlayer->GetCID(), WEAPON_WORLD);
+	}
+
+	int Index = GameServer()->Collision()->GetCollisionAt(m_Pos.x-m_ProximityRadius/3.f, m_Pos.y+m_ProximityRadius/3.f);
+	switch (Index)
+	{
+	case CCollision::CRAFT_COPPER:
+		m_CraftTick++;
+		if(m_CraftTick%50 == 0)
+		{
+			m_CraftTick = 0;
+			GetPlayer()->m_CraftingType == CRAFTTYPE_COPPER;
+		}
+		break;
+	
+	default:
+		break;
 	}
 
 	// handle Weapons

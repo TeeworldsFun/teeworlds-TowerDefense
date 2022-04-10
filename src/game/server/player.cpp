@@ -3,7 +3,7 @@
 #include <new>
 #include <engine/shared/config.h>
 #include "player.h"
-
+#include "CraftingType.h"
 
 MACRO_ALLOC_POOL_ID_IMPL(CPlayer, MAX_CLIENTS)
 
@@ -125,6 +125,18 @@ void CPlayer::Tick()
 		++m_TeamChangeTick;
  	}
 
+	if(m_CraftingType && GetCharacter()->GetCraftTick()%50 == 0)
+	{
+		switch (m_CraftingType)
+		{
+		case CRAFTTYPE_COAL:
+			
+			break;
+		
+		default:
+			break;
+		}
+	}
 	HandleTuningParams();
 }
 

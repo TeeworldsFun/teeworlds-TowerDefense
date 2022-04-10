@@ -26,8 +26,8 @@ private:
     int m_aIDs[9];
     int m_lIDs[9];
     int m_lIDs1[9];
-    int m_lIDs2[100];
-    int m_lIDs3[100];
+    int m_lIDs2[40];
+    int m_lIDs3[40];
 
     vec2 m_Pos;
     vec2 m_Pos1;

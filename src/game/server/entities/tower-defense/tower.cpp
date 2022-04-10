@@ -169,8 +169,8 @@ void CTower::Snap(int SnappingClient)
         if(!pLaser3)
             return;
 
-        pLaser3->m_X = (int)(cos(3.15/200*i*4)*(190.0+5/50*i)+m_Pos.x);
-		pLaser3->m_Y = (int)(sin(3.15/200*i*4)*(190.0+5/50*i)+m_Pos.y);
+        pLaser3->m_X = (int)(cos(3.15/40*i*4)*(190.0+5/50*i)+m_Pos.x);
+		pLaser3->m_Y = (int)(sin(3.15/40*i*4)*(190.0+5/50*i)+m_Pos.y);
         pLaser3->m_FromX = m_Pos.x;
         pLaser3->m_FromY = m_Pos.y;
         pLaser3->m_StartTick = Server()->Tick()-6;

@@ -211,6 +211,17 @@ void CCollision::Init(class CLayers *pLayers)
 		case TILE_NOHOOK:
 			m_pTiles[i].m_Index = COLFLAG_SOLID|COLFLAG_NOHOOK;
 			break;
+
+		// Crafts..
+		case TILE_COPPER:
+			m_pTiles[i].m_Index = CRAFT_COPPER;
+			break;
+		case TILE_LEAD:
+			m_pTiles[i].m_Index = CRAFT_LEAD;
+			break;
+		case TILE_COAL:
+			m_pTiles[i].m_Index = CRAFT_COAL;
+			break;
 		default:
 			m_pTiles[i].m_Index = 0;
 		}

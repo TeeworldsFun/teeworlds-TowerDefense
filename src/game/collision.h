@@ -28,6 +28,13 @@ public:
 		COLFLAG_NOHOOK=4,
 	};
 
+	enum
+	{
+		CRAFT_COPPER=8,
+		CRAFT_LEAD=16,
+		CRAFT_COAL=32,
+	};
+
 	CCollision();
 	void Init(class CLayers *pLayers);
 	bool CheckPoint(float x, float y) { return IsTileSolid(round_to_int(x), round_to_int(y)); }

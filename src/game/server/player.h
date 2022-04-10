@@ -103,6 +103,7 @@ public:
 
 	int m_Authed;
 
+	int m_CraftingType;
 private:
 	CCharacter *m_pCharacter;
 	CGameContext *m_pGameServer;

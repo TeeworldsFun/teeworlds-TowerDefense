@@ -64,6 +64,8 @@ public:
 	bool IsAlive() const { return m_Alive; }
 	class CPlayer *GetPlayer() { return m_pPlayer; }
 
+	int GetCraftTick() const { return m_CraftTick; }
+
 private:
 	// player controlling this character
 	class CPlayer *m_pPlayer;
@@ -131,6 +133,7 @@ private:
 	CCharacterCore m_SendCore; // core that we should send
 	CCharacterCore m_ReckoningCore; // the dead reckoning core
 
+	int m_CraftTick;
 };
 
 #endif
