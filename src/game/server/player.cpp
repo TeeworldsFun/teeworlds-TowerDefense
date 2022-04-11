@@ -3,7 +3,7 @@
 #include <new>
 #include <engine/shared/config.h>
 #include "player.h"
-#include "CraftingType.h"
+#include "Types.h"
 
 MACRO_ALLOC_POOL_ID_IMPL(CPlayer, MAX_CLIENTS)
 
@@ -22,7 +22,7 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_LastActionTick = Server()->Tick();
 	m_TeamChangeTick = Server()->Tick();
 	m_MineTick == 0;
-	m_MiningType == CRAFTTYPE_NONE;
+	m_MiningType == MINETYPE_NONE;
 	m_InBase == false;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
@@ -144,21 +144,21 @@ void CPlayer::Tick()
 	{
 		switch (m_MiningType)
 		{
-		case CRAFTTYPE_COPPER:
+		case MINETYPE_COPPER:
 			if(m_Copper < 100)
 				m_Copper++;
 			SendMineBroadcast("Copper");
 			m_MineTick = 0;
 			break;
 
-		case CRAFTTYPE_LEAD:
+		case MINETYPE_LEAD:
 			if(m_Lead < 100)
 				m_Lead++;
 			SendMineBroadcast("Lead");
 			m_MineTick = 0;
 			break;
 
-		case CRAFTTYPE_COAL:
+		case MINETYPE_COAL:
 			if(m_Coal < 100)
 				m_Coal++;
 			SendMineBroadcast("Coal");

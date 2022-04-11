@@ -3,7 +3,7 @@
 #include <new>
 #include <engine/shared/config.h>
 #include <game/server/gamecontext.h>
-#include <game/server/CraftingType.h>
+#include <game/server/Types.h>
 #include <game/mapitems.h>
 
 #include "character.h"
@@ -553,17 +553,17 @@ void CCharacter::Tick()
 	switch (Index)
 	{
 	case CCollision::MINECOPPER:
-		GetPlayer()->m_MiningType = CRAFTTYPE_COPPER;
+		GetPlayer()->m_MiningType = MINETYPE_COPPER;
 		GetPlayer()->m_MineTick++;
 		break;
 	
 	case CCollision::MINELEAD:
-		GetPlayer()->m_MiningType = CRAFTTYPE_LEAD;
+		GetPlayer()->m_MiningType = MINETYPE_LEAD;
 		GetPlayer()->m_MineTick++;
 		break;
 	
 	case CCollision::MINECOAL:
-		GetPlayer()->m_MiningType = CRAFTTYPE_COAL;
+		GetPlayer()->m_MiningType = MINETYPE_COAL;
 		GetPlayer()->m_MineTick++;
 		break;
 	

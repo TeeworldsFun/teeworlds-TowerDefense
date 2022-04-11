@@ -1,0 +1,12 @@
+#ifndef GAME_SERVER_TYPES_H
+#define GAME_SERVER_TYPES_H
+
+enum
+{
+    MINETYPE_NONE = 0,
+    MINETYPE_COPPER,
+    MINETYPE_LEAD,
+    MINETYPE_COAL,
+};
+
+#endif

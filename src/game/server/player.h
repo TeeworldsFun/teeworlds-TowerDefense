@@ -6,7 +6,7 @@
 // this include should perhaps be removed
 #include "entities/character.h"
 #include "gamecontext.h"
-#include "CraftingType.h"
+#include "Types.h"
 
 // player object
 class CPlayer
@@ -114,15 +114,15 @@ public:
 	{
 		switch (m_MiningType)
 		{
-		case CRAFTTYPE_COPPER:
+		case MINETYPE_COPPER:
 			return "Copper";
 			break;
 		
-		case CRAFTTYPE_LEAD:
+		case MINETYPE_LEAD:
 			return "Lead";
 			break;
 
-		case CRAFTTYPE_COAL:
+		case MINETYPE_COAL:
 			return "Coal";
 			break;
 		
@@ -135,15 +135,15 @@ public:
 	{
 		switch (MineType)
 		{
-		case CRAFTTYPE_COPPER:
+		case MINETYPE_COPPER:
 			return m_Copper;
 			break;
 		
-		case CRAFTTYPE_LEAD:
+		case MINETYPE_LEAD:
 			return m_Lead;
 			break;
 
-		case CRAFTTYPE_COAL:
+		case MINETYPE_COAL:
 			return m_Coal;
 			break;
 		
@@ -158,15 +158,15 @@ public:
 	{
 		switch (MineType)
 		{
-		case CRAFTTYPE_COPPER:
+		case MINETYPE_COPPER:
 			return &m_Copper;
 			break;
 		
-		case CRAFTTYPE_LEAD:
+		case MINETYPE_LEAD:
 			return &m_Lead;
 			break;
 
-		case CRAFTTYPE_COAL:
+		case MINETYPE_COAL:
 			return &m_Coal;
 			break;
 		

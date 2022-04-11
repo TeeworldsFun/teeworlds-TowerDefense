@@ -677,7 +677,7 @@ set_glob(GAME_SERVER GLOB_RECURSE src/game/server
   entities/tower-defense/tower-team-sign.h
   entities/tower-defense/tower.cpp
   entities/tower-defense/tower.h
-  CraftingType.h
+  Types.h
   entity.cpp
   entity.h
   eventhandler.cpp

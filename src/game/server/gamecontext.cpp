@@ -12,7 +12,7 @@
 #include "gamemodes/mod.h"
 
 #include <teeuniverses/components/localization.h>
-#include "CraftingType.h"
+#include "Types.h"
 
 enum
 {
@@ -1642,9 +1642,9 @@ void CGameContext::ConMe(IConsole::IResult *pResult, void *pUserData)
 	CGameContext *pSelf = (CGameContext *)pUserData;
 	int ClientID = pResult->GetClientID();
 	
-	int *Copper_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(CRAFTTYPE_COPPER);
-	int *Lead_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(CRAFTTYPE_LEAD);
-	int *Coal_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(CRAFTTYPE_COAL);
+	int *Copper_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(MINETYPE_COPPER);
+	int *Lead_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(MINETYPE_LEAD);
+	int *Coal_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(MINETYPE_COAL);
 
 	pSelf->SendChatTarget(ClientID, _("~~~~~~~~ Me ~~~~~~~~"));
 	pSelf->SendChatTarget(ClientID, _("Name: {str:Name}"), "Name", pSelf->Server()->ClientName(ClientID), NULL);
