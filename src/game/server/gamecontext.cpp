@@ -1007,9 +1007,9 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 		{
 			CNetMsg_Cl_Emoticon *pMsg = (CNetMsg_Cl_Emoticon *)pRawMsg;
 
-			if(pMsg->m_Emoticon == EMOTICON_DROP)
+			if(pMsg->m_Emoticon == EMOTICON_GHOST)
 			{
-				// WIP: Switch ammo type.
+				m_apPlayers[ClientID]->ChangeAmmoType();
 			}
 
 			pPlayer->m_LastEmote = Server()->Tick();

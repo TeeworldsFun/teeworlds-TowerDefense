@@ -14,11 +14,18 @@ CProjectile::CProjectile(CGameWorld *pGameWorld, int Type, int Owner, vec2 Pos, 
 	m_LifeSpan = Span;
 	m_Owner = Owner;
 	m_Force = Force;
-	m_Damage = Damage;
+	if(GameServer()->m_apPlayers[Owner]->m_AmmoType == AMMOTYPE_Dmg)
+		m_Damage = Damage + 5;
+	else
+		m_Damage = Damage;
 	m_SoundImpact = SoundImpact;
 	m_Weapon = Weapon;
 	m_StartTick = Server()->Tick();
-	m_Explosive = Explosive;
+
+	if(GameServer()->m_apPlayers[Owner]->m_AmmoType == AMMOTYPE_Fire)
+		m_Explosive = true;
+	else
+		m_Explosive = Explosive;
 
 	GameWorld()->InsertEntity(this);
 }

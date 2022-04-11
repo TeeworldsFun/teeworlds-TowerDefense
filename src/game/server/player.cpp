@@ -21,9 +21,10 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_SpectatorID = SPEC_FREEVIEW;
 	m_LastActionTick = Server()->Tick();
 	m_TeamChangeTick = Server()->Tick();
-	m_MineTick == 0;
-	m_MiningType == MINETYPE_NONE;
-	m_InBase == false;
+	m_MineTick = 0;
+	m_MiningType = MINETYPE_NONE;
+	m_InBase = false;
+	m_AmmoType = AMMOTYPE_NONE;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
 	m_Authed = IServer::AUTHED_NO;
@@ -407,4 +408,139 @@ void CPlayer::SendMineBroadcast(char* CraftType)
 {
 //	str_format(CraftType, sizeof(CraftType), "%s", GameServer()->Server()->Localization()->Localize(GetLanguage(), CraftType));
 	GameServer()->SendBroadcast_VL(m_ClientID, _("Mining...\n \n{str:CraftType}: {int:MineNum}/100"), "CraftType", GameServer()->Server()->Localization()->Localize(GetLanguage(), CraftType), "MineNum", GetMineNum_VL(m_MiningType), NULL);
+}
+
+bool CPlayer::FireMines(int Type)
+{
+	switch (Type)
+	{
+	case AMMOTYPE_Dmg:
+		if(GameServer()->m_pController->m_Copper[GetTeam()] >= AMMOPRICE_Copper_Dmg)
+			GameServer()->m_pController->m_Copper[GetTeam()] -= AMMOPRICE_Copper_Dmg;
+		else
+			return false;
+		break;
+
+	case AMMOTYPE_BreakDefense:
+		if(GameServer()->m_pController->m_Lead[GetTeam()] >= AMMOPRICE_Lead_BreakDefense)
+		{
+			GameServer()->m_pController->m_Lead[GetTeam()] -= AMMOPRICE_Lead_BreakDefense;
+		}
+		else
+			return false;
+		break;
+	
+	case AMMOTYPE_Fire:
+		if(GameServer()->m_pController->m_Lead[GetTeam()] >= AMMOPRICE_Lead_Fire && GameServer()->m_pController->m_Coal[GetTeam()] >= AMMOPRICE_Coal_Fire)
+		{
+			GameServer()->m_pController->m_Lead[GetTeam()] -= AMMOPRICE_Lead_Fire;
+			GameServer()->m_pController->m_Coal[GetTeam()] -= AMMOPRICE_Coal_Fire;
+		}
+		else
+			return false;
+		break;
+
+	case AMMOTYPE_Slime:
+		if(GameServer()->m_pController->m_Lead[GetTeam()] >= AMMOPRICE_Lead_Slime && GameServer()->m_pController->m_Coal[GetTeam()] >= AMMOPRICE_Coal_Slime && GameServer()->m_pController->m_Copper[GetTeam()] >= AMMOPRICE_Copper_Slime)
+		{
+			GameServer()->m_pController->m_Lead[GetTeam()] -= AMMOPRICE_Lead_Slime;
+			GameServer()->m_pController->m_Coal[GetTeam()] -= AMMOPRICE_Coal_Slime;
+			GameServer()->m_pController->m_Copper[GetTeam()] -= AMMOPRICE_Copper_Slime;
+		}
+		else
+			return false;
+		break;
+
+	case AMMOTYPE_Freeze:
+		if(GameServer()->m_pController->m_Lead[GetTeam()] >= AMMOPRICE_Lead_Freeze && GameServer()->m_pController->m_Coal[GetTeam()] >= AMMOPRICE_Coal_Freeze && GameServer()->m_pController->m_Copper[GetTeam()] >= AMMOPRICE_Copper_Freeze)
+		{
+			GameServer()->m_pController->m_Lead[GetTeam()] -= AMMOPRICE_Lead_Freeze;
+			GameServer()->m_pController->m_Coal[GetTeam()] -= AMMOPRICE_Coal_Freeze;
+			GameServer()->m_pController->m_Copper[GetTeam()] -= AMMOPRICE_Copper_Freeze;
+		}
+		else
+			return false;
+		break;
+	
+	default:
+		return false;
+		break;
+	}
+
+	return true;
+}
+
+void CPlayer::ChangeAmmoType()
+{
+	if(m_AmmoType < NUM_AMMOTYPE)
+		m_AmmoType++;
+	else
+		m_AmmoType = AMMOTYPE_NONE;
+
+	GameServer()->SendBroadcast_VL(m_ClientID, _("Ammo Type: {str:AmmoType}"), 
+	"AmmoType", GetAmmoName(m_AmmoType));
+}
+
+bool CPlayer::FireAmmo(int Type)
+{
+	switch (Type)
+	{
+	case AMMOTYPE_NONE:
+		return true;
+		break;
+	
+	case AMMOTYPE_Dmg:
+		if(m_Copper >= AMMOPRICE_Copper_Dmg)
+			m_Copper -= AMMOPRICE_Copper_Dmg;
+		else
+			return false;
+		break;
+
+	case AMMOTYPE_BreakDefense:
+		if(m_Lead >= AMMOPRICE_Lead_BreakDefense)
+		{
+			m_Lead -= AMMOPRICE_Lead_BreakDefense;
+		}
+		else
+			return false;
+		break;
+	
+	case AMMOTYPE_Fire:
+		if(m_Lead >= AMMOPRICE_Lead_Fire && m_Coal >= AMMOPRICE_Coal_Fire)
+		{
+			m_Lead -= AMMOPRICE_Lead_Fire;
+			m_Coal -= AMMOPRICE_Coal_Fire;
+		}
+		else
+			return false;
+		break;
+
+	case AMMOTYPE_Slime:
+		if(m_Lead >= AMMOPRICE_Lead_Slime && m_Coal >= AMMOPRICE_Coal_Slime && m_Copper >= AMMOPRICE_Copper_Slime)
+		{
+			m_Lead -= AMMOPRICE_Lead_Slime;
+			m_Coal -= AMMOPRICE_Coal_Slime;
+			m_Copper -= AMMOPRICE_Copper_Slime;
+		}
+		else
+			return false;
+		break;
+
+	case AMMOTYPE_Freeze:
+		if(m_Lead >= AMMOPRICE_Lead_Freeze && m_Coal >= AMMOPRICE_Coal_Freeze && m_Copper >= AMMOPRICE_Copper_Freeze)
+		{
+			m_Lead -= AMMOPRICE_Lead_Freeze;
+			m_Coal -= AMMOPRICE_Coal_Freeze;
+			m_Copper -= AMMOPRICE_Copper_Freeze;
+		}
+		else
+			return false;
+		break;
+	
+	default:
+		return false;
+		break;
+	}
+
+	return true;
 }

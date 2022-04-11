@@ -106,13 +106,14 @@ public:
 
 // Craft
 public:
-	int m_MineTick;
-	int m_MiningType;
-	bool m_InBase;
 	void SendMineBroadcast(char* CraftType);
-	const char *GetMineName()
+	bool FireMines(int Type);
+	bool FireAmmo(int Type);
+	void ChangeAmmoType();
+	
+	const char *GetMineName(int MineType)
 	{
-		switch (m_MiningType)
+		switch (MineType)
 		{
 		case MINETYPE_COPPER:
 			return "Copper";
@@ -127,6 +128,36 @@ public:
 			break;
 		
 		default:
+			break;
+		}
+	}
+
+	const char *GetAmmoName(int AmmoType)
+	{
+		switch (AmmoType)
+		{
+		case AMMOTYPE_Dmg:
+			return "Damage Ammo";
+			break;
+		
+		case AMMOTYPE_BreakDefense:
+			return "Break Armor Ammo";
+			break;
+
+		case AMMOTYPE_Fire:
+			return "Explosion Ammo";
+			break;
+
+		case AMMOTYPE_Slime:
+			return "Slime Ammo";
+			break;
+
+		case AMMOTYPE_Freeze:
+			return "Freeze Ammo";
+			break;
+
+		default:
+			return "Normal";
 			break;
 		}
 	}
@@ -176,6 +207,13 @@ public:
 
 		return 0;
 	}
+
+	int m_MineTick;
+	int m_MiningType;
+	
+	bool m_InBase;
+	
+	int m_AmmoType;
 private:
 	CCharacter *m_pCharacter;
 	CGameContext *m_pGameServer;
@@ -197,7 +235,7 @@ private:
 	void HandleTuningParams(); //This function will send the new parameters if needed
 
 // Items
-private:
+public:
 	int m_Copper;
 	int m_Lead;
 	int m_Coal;

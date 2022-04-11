@@ -268,7 +268,7 @@ void CCharacter::FireWeapon()
 		return;
 
 	// check for ammo
-	if(!m_aWeapons[m_ActiveWeapon].m_Ammo)
+	if(!m_aWeapons[m_ActiveWeapon].m_Ammo || !GetPlayer()->FireAmmo(GetPlayer()->m_AmmoType))
 	{
 		// 125ms is a magical limit of how fast a human can click
 		m_ReloadTimer = 125 * Server()->TickSpeed() / 1000;
@@ -751,7 +751,14 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 
 	if(Dmg)
 	{
-		if(m_Armor)
+		if(GameServer()->m_apPlayers[From]->m_AmmoType == AMMOTYPE_BreakDefense)
+		{
+			if(m_Armor-5 >= 0)
+				m_Armor -= 5;
+			else
+				m_Armor -= m_Armor;
+		}
+		else if(m_Armor)
 		{
 			if(Dmg > 1)
 			{
