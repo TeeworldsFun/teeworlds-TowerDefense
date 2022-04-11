@@ -140,24 +140,27 @@ void CPlayer::Tick()
 		++m_TeamChangeTick;
  	}
 
-	if(m_MiningType && m_MineTick >= 50)
+	if(m_MiningType && m_MineTick >= 25)
 	{
 		switch (m_MiningType)
 		{
 		case CRAFTTYPE_COPPER:
-			m_Copper++;
+			if(m_Copper < 100)
+				m_Copper++;
 			SendMineBroadcast("Copper");
 			m_MineTick = 0;
 			break;
 
 		case CRAFTTYPE_LEAD:
-			m_Lead++;
+			if(m_Lead < 100)
+				m_Lead++;
 			SendMineBroadcast("Lead");
 			m_MineTick = 0;
 			break;
 
 		case CRAFTTYPE_COAL:
-			m_Coal++;
+			if(m_Coal < 100)
+				m_Coal++;
 			SendMineBroadcast("Coal");
 			m_MineTick = 0;
 			break;
@@ -403,5 +406,5 @@ void CPlayer::SetLanguage(const char* pLanguage)
 void CPlayer::SendMineBroadcast(char* CraftType)
 {
 //	str_format(CraftType, sizeof(CraftType), "%s", GameServer()->Server()->Localization()->Localize(GetLanguage(), CraftType));
-	GameServer()->SendBroadcast_VL(m_ClientID, _("Mining...\n \n{str:CraftType}: {int:MineNum}/100"), "CraftType", GameServer()->Server()->Localization()->Localize(GetLanguage(), CraftType), "MineNum", GetMineNum(m_MiningType), NULL);
+	GameServer()->SendBroadcast_VL(m_ClientID, _("Mining...\n \n{str:CraftType}: {int:MineNum}/100"), "CraftType", GameServer()->Server()->Localization()->Localize(GetLanguage(), CraftType), "MineNum", GetMineNum_VL(m_MiningType), NULL);
 }

@@ -10,7 +10,7 @@ CGameControllerMOD::CGameControllerMOD(class CGameContext *pGameServer)
 	// DM, TDM and CTF are reserved for teeworlds original modes.
 	m_pGameType = "TeeDefense";
 
-	m_GameFlags = GAMEFLAG_TEAMS; // GAMEFLAG_TEAMS makes it a two-team gamemode
+	//m_GameFlags = GAMEFLAG_TEAMS; // GAMEFLAG_TEAMS makes it a two-team gamemode
 }
 
 void CGameControllerMOD::Tick()

@@ -119,8 +119,11 @@ void CTower::Tick()
                     GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseHealth(1);
                     GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseArmor(1);
 
-                    GameServer()->SendBroadcast_VL(i, _("~~~ Tower ~~~\nTeam: {str:Team}\nMines:\nCopper: {int:copper}\nLead: {int:lead}\nCoal: {int:coal}"), 
-                    "Team", m_Team ? "Blue" : "Red",
+                    GameServer()->SendBroadcast_VL(i, _("~~~~~  Tower  ~~~~~\nTeam: {str:Team}\nHealth: {int:hp}\nLevel: {int:level}\nExp: {int:exp}\nCopper: {int:copper}\nLead: {int:lead}\nCoal: {int:coal}"), 
+                    "Team", m_Team ? "Attacker" : "Tee",
+                    "hp", &m_Health, 
+                    "level", &m_Level, 
+                    "exp", &m_Exp, 
                     "copper", &Copper, 
                     "lead", &Lead, 
                     "coal", &Coal, NULL);
@@ -128,10 +131,10 @@ void CTower::Tick()
             }
             else
             {
-                m_pPlayer->m_InBase = false;
-                TakeDamage(5);
-                m_pPlayer->m_Score++;
-                Character->Die(-1, WEAPON_WORLD);
+                InAttackerTowerTick[i]++;
+                GameServer()->SendBroadcast_VL(i, _("Leave quickly, The destruction is imminent!\nLeave quickly, The destruction is imminent!\nLeave quickly, The destruction is imminent!"));
+                if(InAttackerTowerTick[i] >= 200){
+                    Character->Die(-1, WEAPON_WORLD); InAttackerTowerTick[i] = 0;}           
             }
         }
         else

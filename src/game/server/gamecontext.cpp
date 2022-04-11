@@ -12,6 +12,7 @@
 #include "gamemodes/mod.h"
 
 #include <teeuniverses/components/localization.h>
+#include "CraftingType.h"
 
 enum
 {
@@ -1006,8 +1007,10 @@ void CGameContext::OnMessage(int MsgID, CUnpacker *pUnpacker, int ClientID)
 		{
 			CNetMsg_Cl_Emoticon *pMsg = (CNetMsg_Cl_Emoticon *)pRawMsg;
 
-			if(g_Config.m_SvSpamprotection && pPlayer->m_LastEmote && pPlayer->m_LastEmote+Server()->TickSpeed()*3 > Server()->Tick())
-				return;
+			if(pMsg->m_Emoticon == EMOTICON_DROP)
+			{
+				// WIP: Switch ammo type.
+			}
 
 			pPlayer->m_LastEmote = Server()->Tick();
 
@@ -1631,6 +1634,25 @@ void CGameContext::ConsoleOutputCallback_Chat(const char *pStr, void *pUser)
 	CGameContext* pThis = (CGameContext*) pUser;
 	if(pThis->m_ConsoleOutput_Target >= 0 && pThis->m_ConsoleOutput_Target < MAX_CLIENTS)
 		pThis->SendChatTarget(pThis->m_ConsoleOutput_Target, pStr);
+} 
+
+// Chat Commands.
+void CGameContext::ConMe(IConsole::IResult *pResult, void *pUserData)
+{
+	CGameContext *pSelf = (CGameContext *)pUserData;
+	int ClientID = pResult->GetClientID();
+	
+	int *Copper_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(CRAFTTYPE_COPPER);
+	int *Lead_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(CRAFTTYPE_LEAD);
+	int *Coal_VL = pSelf->m_apPlayers[ClientID]->GetMineNum_VL(CRAFTTYPE_COAL);
+
+	pSelf->SendChatTarget(ClientID, _("~~~~~~~~ Me ~~~~~~~~"));
+	pSelf->SendChatTarget(ClientID, _("Name: {str:Name}"), "Name", pSelf->Server()->ClientName(ClientID), NULL);
+	pSelf->SendChatTarget(ClientID, _("Score: {int:Score}"), "Score", &pSelf->m_apPlayers[ClientID]->m_Score, NULL);
+	pSelf->SendChatTarget(ClientID, _("Copper: {int:Copper}"), "Copper", Copper_VL, NULL);
+	pSelf->SendChatTarget(ClientID, _("Lead: {int:Lead}"), "Lead", Lead_VL, NULL);
+	pSelf->SendChatTarget(ClientID, _("Coal: {int:Coal}"), "Coal", Coal_VL, NULL);
+	pSelf->SendChatTarget(ClientID, _("~~~~~~~~ Me ~~~~~~~~"));
 }
 
 void CGameContext::OnConsoleInit()
@@ -1664,6 +1686,9 @@ void CGameContext::OnConsoleInit()
 	
 	Console()->Register("about", "", CFGFLAG_CHAT, ConAbout, this, "Show information about the mod");
 	Console()->Register("language", "s", CFGFLAG_CHAT, ConLanguage, this, "Show information about the mod");
+	Console()->Register("lang", "s", CFGFLAG_CHAT, ConLanguage, this, "Show information about the mod");
+	
+	Console()->Register("me", "", CFGFLAG_CHAT, ConMe, this, "Show information about the mod");
 	
 	Console()->Chain("sv_motd", ConchainSpecialMotdupdate, this);
 }

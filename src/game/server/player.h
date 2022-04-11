@@ -131,7 +131,30 @@ public:
 		}
 	}
 
-	int *GetMineNum(int MineType)
+	int GetMineNum(int MineType)
+	{
+		switch (MineType)
+		{
+		case CRAFTTYPE_COPPER:
+			return m_Copper;
+			break;
+		
+		case CRAFTTYPE_LEAD:
+			return m_Lead;
+			break;
+
+		case CRAFTTYPE_COAL:
+			return m_Coal;
+			break;
+		
+		default:
+			break;
+		}
+
+		return 0;
+	}
+
+	int *GetMineNum_VL(int MineType)
 	{
 		switch (MineType)
 		{

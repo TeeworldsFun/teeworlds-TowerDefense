@@ -33,6 +33,7 @@ private:
     vec2 m_Pos1;
 
     int InTowerTick[MAX_CLIENTS];
+    int InAttackerTowerTick[MAX_CLIENTS];
 
     int m_Exp;
     int m_Level;
