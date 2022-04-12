@@ -13,6 +13,8 @@ CProjectile::CProjectile(CGameWorld *pGameWorld, int Type, int Owner, vec2 Pos, 
 	m_Direction = Dir;
 	m_LifeSpan = Span;
 	m_Owner = Owner;
+	if(GameServer()->m_apPlayers[Owner]->m_AmmoType == AMMOTYPE_Force)
+		Force+=10;
 	m_Force = Force;
 	if(GameServer()->m_apPlayers[Owner]->m_AmmoType == AMMOTYPE_Dmg)
 		m_Damage = Damage + 5;

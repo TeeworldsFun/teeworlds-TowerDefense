@@ -4,12 +4,13 @@
 #include <engine/shared/config.h>
 #include "player.h"
 #include "Types.h"
+#include "entities/tower-defense/attacker.h"
 
 MACRO_ALLOC_POOL_ID_IMPL(CPlayer, MAX_CLIENTS)
 
 IServer *CPlayer::Server() const { return m_pGameServer->Server(); }
 
-CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
+CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team, int AttackerType)
 {
 	m_pGameServer = pGameServer;
 	m_RespawnTick = Server()->Tick();
@@ -25,6 +26,11 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_MiningType = MINETYPE_NONE;
 	m_InBase = false;
 	m_AmmoType = AMMOTYPE_NONE;
+
+	m_AttackerType = AttackerType;
+
+	if(AttackerType)
+		IsAttacker = true;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
 	m_Authed = IServer::AUTHED_NO;
@@ -389,7 +395,13 @@ void CPlayer::TryRespawn()
 
 	m_InBase = false;
 	m_Spawning = false;
-	m_pCharacter = new(m_ClientID) CCharacter(&GameServer()->m_World);
+
+	if(IsAttacker && m_AttackerType == AttackerType_Dagger)
+	{
+		m_pCharacter = new(m_ClientID) CAttacker(&GameServer()->m_World);
+	}
+	else
+		m_pCharacter = new(m_ClientID) CCharacter(&GameServer()->m_World);
 	m_pCharacter->Spawn(this, SpawnPos);
 	GameServer()->CreatePlayerSpawn(SpawnPos);
 }
@@ -421,10 +433,10 @@ bool CPlayer::FireMines(int Type)
 			return false;
 		break;
 
-	case AMMOTYPE_BreakDefense:
-		if(GameServer()->m_pController->m_Lead[GetTeam()] >= AMMOPRICE_Lead_BreakDefense)
+	case AMMOTYPE_Force:
+		if(GameServer()->m_pController->m_Lead[GetTeam()] >= AMMOPRICE_Lead_Force)
 		{
-			GameServer()->m_pController->m_Lead[GetTeam()] -= AMMOPRICE_Lead_BreakDefense;
+			GameServer()->m_pController->m_Lead[GetTeam()] -= AMMOPRICE_Lead_Force;
 		}
 		else
 			return false;
@@ -496,10 +508,10 @@ bool CPlayer::FireAmmo(int Type)
 			return false;
 		break;
 
-	case AMMOTYPE_BreakDefense:
-		if(m_Lead >= AMMOPRICE_Lead_BreakDefense)
+	case AMMOTYPE_Force:
+		if(m_Lead >= AMMOPRICE_Lead_Force)
 		{
-			m_Lead -= AMMOPRICE_Lead_BreakDefense;
+			m_Lead -= AMMOPRICE_Lead_Force;
 		}
 		else
 			return false;

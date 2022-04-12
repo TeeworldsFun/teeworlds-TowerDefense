@@ -250,6 +250,7 @@ public:
 	virtual void SetClientLanguage(int ClientID, const char* pLanguage);
 	virtual int* GetIdMap(int ClientID);
 	virtual void SetCustClt(int ClientID);
+	virtual void InitClientBot(int ClientID);
 };
 
 #endif

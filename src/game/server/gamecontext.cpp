@@ -613,7 +613,7 @@ void CGameContext::OnClientConnected(int ClientID)
 	// Check which team the player should be on
 	const int StartTeam = g_Config.m_SvTournamentMode ? TEAM_SPECTATORS : m_pController->GetAutoTeam(ClientID);
 
-	m_apPlayers[ClientID] = new(ClientID) CPlayer(this, ClientID, StartTeam);
+	m_apPlayers[ClientID] = new(ClientID) CPlayer(this, ClientID, StartTeam, AttackerType_None);
 	//players[client_id].init(client_id);
 	//players[client_id].client_id = client_id;
 
@@ -1653,6 +1653,8 @@ void CGameContext::ConMe(IConsole::IResult *pResult, void *pUserData)
 	pSelf->SendChatTarget(ClientID, _("Lead: {int:Lead}"), "Lead", Lead_VL, NULL);
 	pSelf->SendChatTarget(ClientID, _("Coal: {int:Coal}"), "Coal", Coal_VL, NULL);
 	pSelf->SendChatTarget(ClientID, _("~~~~~~~~ Me ~~~~~~~~"));
+
+	pSelf->CreateAttacker(AttackerType_Dagger, 15);
 }
 
 void CGameContext::OnConsoleInit()
@@ -1859,6 +1861,23 @@ bool CGameContext::IsClientReady(int ClientID)
 bool CGameContext::IsClientPlayer(int ClientID)
 {
 	return m_apPlayers[ClientID] && m_apPlayers[ClientID]->GetTeam() == TEAM_SPECTATORS ? false : true;
+}
+
+void CGameContext::CreateAttacker(int Type, int ClientID)
+{
+	switch (Type)
+	{
+	case AttackerType_Dagger:
+		m_apPlayers[ClientID] = new(ClientID) CPlayer(this, ClientID, TEAM_RED, AttackerType_Dagger);
+		str_copy(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName, "saddo", sizeof(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName));
+		Server()->SetClientName(ClientID, "Dagger");
+		break;
+	
+	default:
+		break;
+	}
+
+	Server()->InitClientBot(ClientID);
 }
 
 const char *CGameContext::GameType() { return m_pController && m_pController->m_pGameType ? m_pController->m_pGameType : ""; }

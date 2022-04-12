@@ -728,7 +728,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 {
 	m_Core.m_Vel += Force;
 
-	if(GameServer()->m_pController->IsFriendlyFire(m_pPlayer->GetCID(), From) && !g_Config.m_SvTeamdamage)
+	if(GameServer()->m_pController->IsFriendlyFire(m_pPlayer->GetCID(), From))
 		return false;
 
 	// m_pPlayer only inflicts half damage on self
@@ -751,21 +751,13 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 
 	if(Dmg)
 	{
-		if(GameServer()->m_apPlayers[From]->m_AmmoType == AMMOTYPE_BreakDefense)
-		{
-			if(m_Armor-5 >= 0)
-				m_Armor -= 5;
-			else
-				m_Armor -= m_Armor;
-		}
-		else if(m_Armor)
+		if(m_Armor)
 		{
 			if(Dmg > 1)
 			{
 				m_Health--;
 				Dmg--;
 			}
-
 			if(Dmg > m_Armor)
 			{
 				Dmg -= m_Armor;
@@ -777,7 +769,6 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 				Dmg = 0;
 			}
 		}
-
 		m_Health -= Dmg;
 	}
 

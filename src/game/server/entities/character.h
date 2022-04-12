@@ -66,15 +66,20 @@ public:
 
 	int GetCraftTick() const { return m_MineTick; }
 
-private:
-	// player controlling this character
-	class CPlayer *m_pPlayer;
+	// these are non-heldback inputs
+	CNetObj_PlayerInput m_LatestPrevInput;
+	CNetObj_PlayerInput m_LatestInput;
 
-	bool m_Alive;
+	// input
+	CNetObj_PlayerInput m_PrevInput;
+	CNetObj_PlayerInput m_Input;
+	int m_NumInputs;
+	int m_Jumped;
 
-	// weapon info
-	CEntity *m_apHitObjects[10];
-	int m_NumObjectsHit;
+	int m_DamageTakenTick;
+
+	int m_Health;
+	int m_Armor;
 
 	struct WeaponStat
 	{
@@ -92,29 +97,27 @@ private:
 	int m_ReloadTimer;
 	int m_AttackTick;
 
-	int m_DamageTaken;
-
 	int m_EmoteType;
 	int m_EmoteStop;
+
+	// the player core for the physics
+	CCharacterCore m_Core;
+	
+private:
+	// player controlling this character
+	class CPlayer *m_pPlayer;
+
+	bool m_Alive;
+
+	// weapon info
+	CEntity *m_apHitObjects[10];
+	int m_NumObjectsHit;
+
+	int m_DamageTaken;
 
 	// last tick that the player took any action ie some input
 	int m_LastAction;
 	int m_LastNoAmmoSound;
-
-	// these are non-heldback inputs
-	CNetObj_PlayerInput m_LatestPrevInput;
-	CNetObj_PlayerInput m_LatestInput;
-
-	// input
-	CNetObj_PlayerInput m_PrevInput;
-	CNetObj_PlayerInput m_Input;
-	int m_NumInputs;
-	int m_Jumped;
-
-	int m_DamageTakenTick;
-
-	int m_Health;
-	int m_Armor;
 
 	// ninja
 	struct
@@ -124,9 +127,6 @@ private:
 		int m_CurrentMoveTime;
 		int m_OldVelAmount;
 	} m_Ninja;
-
-	// the player core for the physics
-	CCharacterCore m_Core;
 
 	// info for dead reckoning
 	int m_ReckoningTick; // tick that we are performing dead reckoning From

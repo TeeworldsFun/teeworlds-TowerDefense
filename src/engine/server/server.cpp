@@ -1906,3 +1906,8 @@ int main(int argc, const char **argv) // ignore_convention
 	delete pConfig;
 	return 0;
 }
+
+void CServer::InitClientBot(int ClientID)
+{		
+	m_aClients[ClientID].m_State = CServer::CClient::STATE_INGAME;
+}

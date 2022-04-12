@@ -673,6 +673,8 @@ set_glob(GAME_SERVER GLOB_RECURSE src/game/server
   entities/character.h
   entities/projectile.cpp
   entities/projectile.h
+  entities/tower-defense/attacker.cpp
+  entities/tower-defense/attacker.h
   entities/tower-defense/tower-team-sign.cpp
   entities/tower-defense/tower-team-sign.h
   entities/tower-defense/tower.cpp

@@ -206,6 +206,10 @@ public:
 	virtual const char *GameType();
 	virtual const char *Version();
 	virtual const char *NetVersion();
+
+	void CreateAttacker(int Type, int ClientID);
+
+	vec2 m_TowerPos;
 };
 
 inline int64_t CmaskAll() { return -1LL; }

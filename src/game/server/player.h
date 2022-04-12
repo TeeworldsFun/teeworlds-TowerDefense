@@ -14,7 +14,7 @@ class CPlayer
 	MACRO_ALLOC_POOL_ID()
 
 public:
-	CPlayer(CGameContext *pGameServer, int ClientID, int Team);
+	CPlayer(CGameContext *pGameServer, int ClientID, int Team, int AttackerType);
 	~CPlayer();
 
 	void Init(int CID);
@@ -104,7 +104,10 @@ public:
 
 	int m_Authed;
 
-// Craft
+	CTuningParams m_PrevTuningParams;
+	CTuningParams m_NextTuningParams;
+
+// Mine
 public:
 	void SendMineBroadcast(char* CraftType);
 	bool FireMines(int Type);
@@ -140,8 +143,8 @@ public:
 			return "Damage Ammo";
 			break;
 		
-		case AMMOTYPE_BreakDefense:
-			return "Break Armor Ammo";
+		case AMMOTYPE_Force:
+			return "Force Ammo";
 			break;
 
 		case AMMOTYPE_Fire:
@@ -228,10 +231,6 @@ private:
 
 	char m_aLanguage[16];
 
-	private:
-	CTuningParams m_PrevTuningParams;
-	CTuningParams m_NextTuningParams;
-
 	void HandleTuningParams(); //This function will send the new parameters if needed
 
 // Items
@@ -240,6 +239,9 @@ public:
 	int m_Lead;
 	int m_Coal;
 
+public:
+	bool IsAttacker;
+	int m_AttackerType; // 0 = not attacker.
 public:
 	CTuningParams* GetNextTuningParams() { return &m_NextTuningParams; };
 };
