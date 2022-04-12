@@ -129,6 +129,11 @@ void CTower::Tick()
                     "coal", &Coal, NULL);
                 }
             }
+            else if(GameServer()->m_apPlayers[i]->IsAttacker)
+            {
+                GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseHealth(1);
+                GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseArmor(1);
+            }
             else
             {
                 InAttackerTowerTick[i]++;

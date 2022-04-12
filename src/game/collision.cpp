@@ -214,7 +214,7 @@ void CCollision::Init(class CLayers *pLayers)
 
 		// Crafts..
 		case TILE_COPPER:
-			m_pTiles[i].m_Index = MINECOPPER;
+			m_pTiles[i].m_Index = MINECOPPER|COLFLAG_NOHOOK;
 			break;
 		case TILE_LEAD:
 			m_pTiles[i].m_Index = MINELEAD;

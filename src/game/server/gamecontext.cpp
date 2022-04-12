@@ -1654,7 +1654,7 @@ void CGameContext::ConMe(IConsole::IResult *pResult, void *pUserData)
 	pSelf->SendChatTarget(ClientID, _("Coal: {int:Coal}"), "Coal", Coal_VL, NULL);
 	pSelf->SendChatTarget(ClientID, _("~~~~~~~~ Me ~~~~~~~~"));
 
-	pSelf->CreateAttacker(AttackerType_Dagger, 15);
+	pSelf->CreateAttacker(AttackerType_Dagger, 31);
 }
 
 void CGameContext::OnConsoleInit()
@@ -1713,6 +1713,7 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 
 	//Get zones
 	m_ZoneHandle_TeeWorlds = m_Collision.GetZoneHandle("teeworlds");
+	m_ZoneHandle_Bots = m_Collision.GetZoneHandle("handleBotAction");
 
 	// reset everything here
 	//world = new GAMEWORLD;

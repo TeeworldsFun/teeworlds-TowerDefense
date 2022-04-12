@@ -32,7 +32,7 @@ private:
     float m_BotTimeLastDamage;
     float m_BotTimeLastSound;
     bool m_BotJumpTry;
-
+    int m_BotMoveState;
 	void TickBotAI();
 	void PlaySound();
 	void RunAction();

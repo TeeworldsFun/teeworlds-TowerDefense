@@ -60,4 +60,16 @@ enum
     NUM_AttackerType = END_AttackerType - 1,
 };
 
+// Move Type.
+enum
+{
+    MoveType_Up,
+    MoveType_Right,
+    MoveType_Down,
+    MoveType_Left,
+
+    END_MoveType,
+
+    NUM_MoveType = END_MoveType - 1,
+};
 #endif

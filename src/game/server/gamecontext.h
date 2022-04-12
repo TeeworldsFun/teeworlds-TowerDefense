@@ -94,6 +94,7 @@ class CGameContext : public IGameServer
 
 public:
 	int m_ZoneHandle_TeeWorlds;
+	int m_ZoneHandle_Bots;
 
 public:
 	IServer *Server() const { return m_pServer; }

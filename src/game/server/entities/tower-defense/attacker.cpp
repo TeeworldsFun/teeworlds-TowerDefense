@@ -59,13 +59,13 @@ void CAttacker::RunAction()
 			return;
 		}
 
-		if (Server()->Tick() - m_BotTimePlayerFound > 25)
+		if (Server()->Tick() - m_BotTimePlayerFound > 0)
 		{
 			m_LatestInput.m_Fire = m_Input.m_Fire = 1;
 			m_BotDir = 0;
 			m_BotTimePlayerFound = Server()->Tick();
 		}
-
+        
 		m_BotClientIDFix = -1;
 	}
 }
@@ -82,9 +82,7 @@ void CAttacker::TickBotAI()
     }
 
     //Clean m_Input
-	m_Input.m_Hook = 0;
 	m_Input.m_Fire = 0;
-	m_Input.m_Jump = 0;
 
     //Run actions
     RunAction();
@@ -95,19 +93,19 @@ void CAttacker::TickBotAI()
     float LessDist = 500.0f;
 
     m_BotClientIDFix = -1;
-	for (int i=0; i<g_Config.m_SvMaxClients; i++)
+	for (int i=0; i<MAX_CLIENTS; i++)
 	{
 	    CPlayer *pPlayer = GameServer()->m_apPlayers[i];
 	    if (!pPlayer || !pPlayer->GetCharacter() || pPlayer->IsAttacker)
             continue;
-
+        
         int Dist = distance(pPlayer->GetCharacter()->m_Pos, m_Pos);
         if (Dist < LessDist)
             LessDist = Dist;
         else
             continue;
 
-        if (Dist < 320.0f)
+        if (Dist < 320.0f && !GameServer()->Collision()->IntersectLine(pPlayer->GetCharacter()->m_Pos, m_Pos, NULL, NULL))
         {
             vec2 DirPlayer = normalize(pPlayer->GetCharacter()->m_Pos - m_Pos);
             if (DirPlayer.x < 0)
@@ -115,7 +113,12 @@ void CAttacker::TickBotAI()
             else
                 m_BotDir = 1;
         
-            m_ActiveWeapon = WEAPON_GUN;
+            if(m_aWeapons[WEAPON_GUN].m_Ammo)
+            {
+                m_ActiveWeapon = WEAPON_GUN;
+                m_aWeapons[WEAPON_GUN].m_Ammo++;
+            }
+            
             PlayerClose = true;
             m_BotClientIDFix = pPlayer->GetCID();
     
@@ -124,6 +127,35 @@ void CAttacker::TickBotAI()
 
             PlayerFound = true;
         }
+
+
+        int Index = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_TeeWorlds, m_Pos);
+        if(Index == ZONE_BOT_UP)
+        {
+            m_BotMoveState = MoveType_Up;
+        } 
+        else if(Index == ZONE_BOT_RIGHT)
+        {
+            m_BotMoveState = MoveType_Right;
+        }
+        else if(Index == ZONE_BOT_DOWN)
+        {
+            m_BotMoveState = MoveType_Down;
+        }
+        else if(Index == ZONE_BOT_LEFT)
+        {
+            m_BotMoveState = MoveType_Left;
+        }
+
+        switch (m_BotMoveState)
+        {
+        case MoveType_Up:
+            m_Pos.y -= 0.01;
+            break;
+        
+        default:
+            break;
+        }
 	}
 
     //Fix target
@@ -131,12 +163,6 @@ void CAttacker::TickBotAI()
     {
         m_Input.m_TargetX = m_BotDir;
         m_Input.m_TargetY = 0;
-    }
-    else if (m_BotClientIDFix != -1)
-    {
-    	CPlayer *pPlayer = GameServer()->m_apPlayers[m_BotClientIDFix];
-    	if (pPlayer && pPlayer->GetCharacter() && m_Pos.y > pPlayer->GetCharacter()->m_Pos.y) // Jump to player
-    		m_Input.m_Hook = 1;
     }
 
     m_EmoteType = EMOTE_ANGRY;
@@ -158,51 +184,6 @@ void CAttacker::TickBotAI()
     
 	}
 
-    //Interact with the envirionment
-	float radiusZ = ms_PhysSize/2.0f;
-    if (distance(m_Pos, m_BotLastPos) < radiusZ || abs(m_Pos.x-m_BotLastPos.x) < radiusZ)
-    {
-        if (Server()->Tick() - m_BotLastStuckTime > Server()->TickSpeed()*0.5f)
-        {
-            m_BotStuckCount++;
-            if (m_BotStuckCount == 15)
-            {
-            	if (!m_BotJumpTry)
-                {
-            		m_Input.m_Jump = 1;
-            		m_BotJumpTry = true;
-                }
-            	else
-            	{
-            		m_BotDir = (!(rand()%2))?1:-1;
-            		m_BotJumpTry = false;
-            	}
-
-                m_BotStuckCount = 0;
-                m_BotLastStuckTime = Server()->Tick();
-            }
-        }
-    }
-
-    //Fix Stuck
-    if (IsGrounded())
-        m_BotTimeGrounded = Server()->Tick();
-
-    //Falls
-    if (m_Core.m_Vel.y > GameServer()->Tuning()->m_Gravity)
-    {
-    	if (m_BotClientIDFix != -1)
-    	{
-    		CPlayer *pPlayer = GameServer()->m_apPlayers[m_BotClientIDFix];
-    		if (pPlayer && pPlayer->GetCharacter() && m_Pos.y > pPlayer->GetCharacter()->m_Pos.y)
-    			m_Input.m_Jump = 1;
-    		else
-    			m_Input.m_Jump = 0;
-    	}
-    	else
-    		m_Input.m_Jump = 1;
-    }
-
     //Limits
     int tx = m_Pos.x+m_BotDir*45.0f;
     if (tx < 0)
@@ -212,17 +193,13 @@ void CAttacker::TickBotAI()
 
     //Delay of actions
     if (!PlayerClose)
-        m_BotTimePlayerFound = Server()->Tick();
+        m_BotTimePlayerFound = Server()->Tick()-5;
 
     //Set data
     m_Input.m_Direction = m_BotDir;
 	m_Input.m_PlayerFlags = PLAYERFLAG_PLAYING;
 	//Check for legacy input
 	if (m_LatestPrevInput.m_Fire && m_Input.m_Fire) m_Input.m_Fire = 0;
-	if (m_LatestInput.m_Jump && m_Input.m_Jump) m_Input.m_Jump = 0;
-	//Ceck Double Jump
-	if (m_Input.m_Jump && (m_Jumped&1) && !(m_Jumped&2) && m_Core.m_Vel.y < GameServer()->Tuning()->m_Gravity)
-		m_Input.m_Jump = 0;
 
 	m_LatestPrevInput = m_LatestInput;
 	m_LatestInput = m_Input;
@@ -233,5 +210,7 @@ void CAttacker::TickBotAI()
 	pTuningParams->m_AirJumpImpulse = 0.0f;
 	pTuningParams->m_AirControlAccel = 0.0f;
 	pTuningParams->m_Gravity = 0.0f;
+    pTuningParams->m_AirControlAccel = 0.0f;
+    pTuningParams->m_GroundControlAccel = 0.0f;
 	CCharacter::FireWeapon();
 }

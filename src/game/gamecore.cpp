@@ -136,6 +136,7 @@ void CCharacterCore::Tick(bool UseInput, const CTuningParams* pTuningParams)
 		// handle hook
 		if(m_Input.m_Hook)
 		{
+			// vec2 Test(TargetDirection.x - (TargetDirection.x*2), TargetDirection.y - (TargetDirection.y*2));
 			if(m_HookState == HOOK_IDLE)
 			{
 				m_HookState = HOOK_FLYING;
@@ -250,7 +251,16 @@ void CCharacterCore::Tick(bool UseInput, const CTuningParams* pTuningParams)
 
 	if(m_HookState == HOOK_GRABBED)
 	{
-		if(m_HookedPlayer != -1)
+		if(m_HookedPlayer > MAX_PLAYERS)
+		{
+			// release hook
+			m_HookedPlayer = -1;
+			m_HookState = HOOK_RETRACTED;
+			m_HookPos = m_Pos;
+			return;
+		}
+
+		if(m_HookedPlayer != -1 && m_HookedPlayer < MAX_PLAYERS)
 		{
 			CCharacterCore *pCharCore = m_pWorld->m_apCharacters[m_HookedPlayer];
 			if(pCharCore)
@@ -269,7 +279,7 @@ void CCharacterCore::Tick(bool UseInput, const CTuningParams* pTuningParams)
 		}
 
 		// don't do this hook rutine when we are hook to a player
-		if(m_HookedPlayer == -1 && distance(m_HookPos, m_Pos) > 46.0f)
+		if(m_HookedPlayer == -1 && distance(m_HookPos, m_Pos) > 46.0f && m_HookedPlayer < MAX_PLAYERS)
 		{
 			vec2 HookVel = normalize(m_HookPos-m_Pos)*pTuningParams->m_HookDragAccel;
 			// the hook as more power to drag you up then down.
@@ -294,7 +304,7 @@ void CCharacterCore::Tick(bool UseInput, const CTuningParams* pTuningParams)
 
 		// release hook (max hook time is 1.25
 		m_HookTick++;
-		if(m_HookedPlayer != -1 && (m_HookTick > SERVER_TICK_SPEED+SERVER_TICK_SPEED/5 || !m_pWorld->m_apCharacters[m_HookedPlayer]))
+		if(m_HookedPlayer != -1 && (m_HookTick > SERVER_TICK_SPEED+SERVER_TICK_SPEED/5 || !m_pWorld->m_apCharacters[m_HookedPlayer]) && m_HookedPlayer < MAX_PLAYERS)
 		{
 			m_HookedPlayer = -1;
 			m_HookState = HOOK_RETRACTED;
