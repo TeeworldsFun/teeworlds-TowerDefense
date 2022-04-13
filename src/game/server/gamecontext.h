@@ -209,7 +209,7 @@ public:
 	virtual const char *NetVersion();
 
 	void CreateAttacker(int Type, int ClientID);
-
+	int CountPlayerNum();
 	vec2 m_TowerPos;
 };
 

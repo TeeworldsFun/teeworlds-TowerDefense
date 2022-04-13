@@ -383,16 +383,13 @@ void IGameController::TogglePause()
 bool IGameController::IsFriendlyFire(int ClientID1, int ClientID2)
 {
 	if(ClientID1 == ClientID2)
+		return true;
+
+	if(!GameServer()->m_apPlayers[ClientID1] || !GameServer()->m_apPlayers[ClientID2])
 		return false;
 
-	if(IsTeamplay())
-	{
-		if(!GameServer()->m_apPlayers[ClientID1] || !GameServer()->m_apPlayers[ClientID2])
-			return false;
-
-		if(GameServer()->m_apPlayers[ClientID1]->GetTeam() == GameServer()->m_apPlayers[ClientID2]->GetTeam())
-			return true;
-	}
+	if(GameServer()->m_apPlayers[ClientID1]->GetTeam() == GameServer()->m_apPlayers[ClientID2]->GetTeam())
+		return true;
 
 	return false;
 }
@@ -524,17 +521,6 @@ void IGameController::Tick()
 						}
 						break;
 					case 1:
-						{
-							// move player to spectator if the reserved slots aren't filled yet, kick him otherwise
-							int Spectators = 0;
-							for(int j = 0; j < MAX_CLIENTS; ++j)
-								if(GameServer()->m_apPlayers[j] && GameServer()->m_apPlayers[j]->GetTeam() == TEAM_SPECTATORS)
-									++Spectators;
-							if(Spectators >= g_Config.m_SvSpectatorSlots)
-								Server()->Kick(i, "Kicked for inactivity");
-							else
-								GameServer()->m_apPlayers[i]->SetTeam(TEAM_SPECTATORS);
-						}
 						break;
 					case 2:
 						{

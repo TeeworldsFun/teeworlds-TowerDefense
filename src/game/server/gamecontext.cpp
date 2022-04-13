@@ -1653,8 +1653,6 @@ void CGameContext::ConMe(IConsole::IResult *pResult, void *pUserData)
 	pSelf->SendChatTarget(ClientID, _("Lead: {int:Lead}"), "Lead", Lead_VL, NULL);
 	pSelf->SendChatTarget(ClientID, _("Coal: {int:Coal}"), "Coal", Coal_VL, NULL);
 	pSelf->SendChatTarget(ClientID, _("~~~~~~~~ Me ~~~~~~~~"));
-
-	pSelf->CreateAttacker(AttackerType_Dagger, 31);
 }
 
 void CGameContext::OnConsoleInit()
@@ -1816,6 +1814,9 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 		}
 	}
 #endif
+
+	for(int i = MAX_PLAYERS+1;i< 35;i++)
+		CreateAttacker(AttackerType_Dagger, i);
 }
 
 void CGameContext::OnShutdown()
@@ -1881,6 +1882,16 @@ void CGameContext::CreateAttacker(int Type, int ClientID)
 	Server()->InitClientBot(ClientID);
 }
 
+int CGameContext::CountPlayerNum()
+{
+	int Num=0;
+	for(int i = 0;i < MAX_PLAYERS;i++)
+	{
+		if(m_apPlayers[i])
+			Num++;
+	}
+	return Num;
+}
 const char *CGameContext::GameType() { return m_pController && m_pController->m_pGameType ? m_pController->m_pGameType : ""; }
 const char *CGameContext::Version() { return GAME_VERSION; }
 const char *CGameContext::NetVersion() { return GAME_NETVERSION; }

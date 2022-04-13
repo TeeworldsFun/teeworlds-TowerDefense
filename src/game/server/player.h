@@ -22,7 +22,7 @@ public:
 	void TryRespawn();
 	void Respawn();
 	void SetTeam(int Team, bool DoChatMsg=true);
-	int GetTeam() const { return m_Team; };
+	int GetTeam() const { return m_AttackerType; };
 	int GetCID() const { return m_ClientID; };
 
 	void Tick();

@@ -91,8 +91,8 @@ void CPlayer::Tick()
 		{	GameServer()->m_pController->m_Coal[GetTeam()]+=m_Coal;	m_Coal = 0;}
 	}
 
-	if(IsAttacker && GetCharacter())
-	{	
+	if(IsAttacker && GetCharacter() && GameServer()->CountPlayerNum()>=1)
+	{
 		int Index = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_Bots, GetCharacter()->m_Pos);
 	    if(Index == ZONE_BOT_UP)
    	 	{
@@ -123,7 +123,7 @@ void CPlayer::Tick()
 		GetCharacter()->m_Core.m_Vel.x = 0.0f;
 		GetCharacter()->m_Core.m_Vel.y = 0.0f;
 	
-		int Speed = 100;
+		int Speed = 5;
 		switch (m_BotMoveState)
 		{
 		case MoveType_Up:

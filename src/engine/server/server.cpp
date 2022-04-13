@@ -356,13 +356,6 @@ void CServer::SetClientName(int ClientID, const char *pName)
 	char aCleanName[MAX_NAME_LENGTH];
 	str_copy(aCleanName, pName, sizeof(aCleanName));
 
-	// clear name
-	for(char *p = aCleanName; *p; ++p)
-	{
-		if(*p < 32)
-			*p = ' ';
-	}
-
 	if(TrySetClientName(ClientID, aCleanName))
 	{
 		// auto rename
@@ -1142,7 +1135,7 @@ void CServer::SendServerInfo(const NETADDR *pAddr, int Token, bool Extended, int
 	// count the players
 	int MaxClients = m_NetServer.MaxClients();
 	int PlayerCount = 0, ClientCount = 0;
-	for(int i = 0; i < MAX_CLIENTS; i++)
+	for(int i = 0; i < MAX_PLAYERS; i++)
 	{
 		if(m_aClients[i].m_State != CClient::STATE_EMPTY)
 		{
@@ -1166,7 +1159,7 @@ void CServer::SendServerInfo(const NETADDR *pAddr, int Token, bool Extended, int
 	p.AddString(GameServer()->Version(), 32);
 	if (Extended)
 	{
-		if (MaxClients <= MAX_CLIENTS)
+		if (MaxClients <= MAX_PLAYERS)
 		{
 			p.AddString(g_Config.m_SvName, 256);
 		}
@@ -1231,7 +1224,7 @@ void CServer::SendServerInfo(const NETADDR *pAddr, int Token, bool Extended, int
 	int Skip = Offset;
 	int Take = ClientsPerPacket;
 
-	for(i = 0; i < MAX_CLIENTS; i++)
+	for(i = 0; i < MAX_PLAYERS; i++)
 	{
 		if(m_aClients[i].m_State != CClient::STATE_EMPTY)
 		{
@@ -1261,7 +1254,7 @@ void CServer::SendServerInfo(const NETADDR *pAddr, int Token, bool Extended, int
 
 void CServer::UpdateServerInfo()
 {
-	for(int i = 0; i < MAX_CLIENTS; ++i)
+	for(int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if(m_aClients[i].m_State != CClient::STATE_EMPTY)
 		{
