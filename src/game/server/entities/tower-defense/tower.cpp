@@ -35,6 +35,8 @@ CTower::CTower(CGameWorld *pGameWorld, vec2 Pos, int Team)
 
     for(int i = 0;i < MAX_LEVEL;i++)
     new CTowerSign(pGameWorld, Pos, Team, i, 200);
+
+    m_Health = 5000;
 }
 
 void CTower::LevelUpgrade()
@@ -49,6 +51,8 @@ void CTower::LevelUpgrade()
 void CTower::Reset() 
 {
     GameServer()->m_World.DestroyEntity(this);
+
+    Server()->SnapFreeID(m_ID);
 	for (unsigned i = 0; i < sizeof(m_aIDs) / sizeof(int); i ++)
 	{
 		if(m_aIDs[i] >= 0){
@@ -147,12 +151,15 @@ void CTower::Tick()
             m_pPlayer->m_InBase = false;
         }
     }
-    LevelUpgrade();
 }
 
 void CTower::TakeDamage(int Dmg)
 {
     m_Health -= Dmg;
+    if(m_Health <= 0)
+    {
+        GameServer()->Server()->Reload();
+    }
 }
 
 void CTower::Snap(int SnappingClient)

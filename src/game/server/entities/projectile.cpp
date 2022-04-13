@@ -13,8 +13,6 @@ CProjectile::CProjectile(CGameWorld *pGameWorld, int Type, int Owner, vec2 Pos, 
 	m_Direction = Dir;
 	m_LifeSpan = Span;
 	m_Owner = Owner;
-	if(GameServer()->m_apPlayers[Owner]->m_AmmoType == AMMOTYPE_Force)
-		Force+=10;
 	m_Force = Force;
 	if(GameServer()->m_apPlayers[Owner]->m_AmmoType == AMMOTYPE_Dmg)
 		m_Damage = Damage + 5;
@@ -76,7 +74,7 @@ void CProjectile::Tick()
 
 	m_LifeSpan--;
 
-	if(TargetChr || Collide || m_LifeSpan < 0 || GameLayerClipped(CurPos))
+	if(TargetChr || Collide || m_LifeSpan < 0 || GameLayerClipped(CurPos) || distance(GameServer()->m_TowerPos, CurPos) <= 200)
 	{
 		if(m_LifeSpan >= 0 || m_Weapon == WEAPON_GRENADE)
 			GameServer()->CreateSound(CurPos, m_SoundImpact);
@@ -87,6 +85,10 @@ void CProjectile::Tick()
 		else if(TargetChr)
 			TargetChr->TakeDamage(m_Direction * max(0.001f, m_Force), m_Damage, m_Owner, m_Weapon);
 
+		else if(distance(GameServer()->m_TowerPos, CurPos) <= 200 && m_Owner > MAX_PLAYERS)
+		{
+			GameServer()->m_pController->GetTower()->TakeDamage(m_Damage);
+		}
 		GameServer()->m_World.DestroyEntity(this);
 	}
 }

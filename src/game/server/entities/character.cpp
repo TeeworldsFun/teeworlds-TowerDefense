@@ -813,6 +813,22 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 	m_EmoteType = EMOTE_PAIN;
 	m_EmoteStop = Server()->Tick() + 500 * Server()->TickSpeed() / 1000;
 
+	if(GameServer()->m_apPlayers[From]->m_AmmoType == AMMOTYPE_Force && GetPlayer()->GetCID() > MAX_PLAYERS)
+    {
+		if(Weapon == WEAPON_SHOTGUN)
+			GetPlayer()->m_AttackerMoveForce += 5;
+		if(Weapon == WEAPON_GUN)
+			GetPlayer()->m_AttackerMoveForce += 20;
+		if(Weapon == WEAPON_GRENADE)
+			GetPlayer()->m_AttackerMoveForce += 10;
+		if(Weapon == WEAPON_RIFLE)
+			GetPlayer()->m_AttackerMoveForce += 20;
+		if(Weapon == WEAPON_NINJA)
+			GetPlayer()->m_AttackerMoveForce += 20;
+		if(Weapon == WEAPON_HAMMER)
+			GetPlayer()->m_AttackerMoveForce += 30;
+	}
+
 	return true;
 }
 

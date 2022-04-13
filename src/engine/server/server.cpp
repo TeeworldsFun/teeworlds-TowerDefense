@@ -134,7 +134,7 @@ void CSnapIDPool::FreeID(int ID)
 {
 	if(ID < 0)
 		return;
-	dbg_assert(m_aIDs[ID].m_State == 1, "id is not alloced");
+	//dbg_assert(m_aIDs[ID].m_State == 1, "id is not alloced");
 
 	m_InUsage--;
 	m_aIDs[ID].m_State = 2;
@@ -1910,4 +1910,9 @@ int main(int argc, const char **argv) // ignore_convention
 void CServer::InitClientBot(int ClientID)
 {		
 	m_aClients[ClientID].m_State = CServer::CClient::STATE_INGAME;
+}
+
+void CServer::Reload()
+{		
+	m_MapReload = 1;
 }

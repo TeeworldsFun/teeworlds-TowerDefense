@@ -30,6 +30,7 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team, int Attacker
 
 	if(AttackerType)
 		IsAttacker = true;
+	m_AttackerMoveForce = 0;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
 	m_Authed = IServer::AUTHED_NO;
@@ -122,23 +123,23 @@ void CPlayer::Tick()
 		GetCharacter()->m_Core.m_Vel.x = 0.0f;
 		GetCharacter()->m_Core.m_Vel.y = 0.0f;
 	
-
+		int Speed = 100;
 		switch (m_BotMoveState)
 		{
 		case MoveType_Up:
-			GetCharacter()->m_Core.m_Pos.y -= 5;
+			GetCharacter()->m_Core.m_Pos.y -= Speed - m_AttackerMoveForce;
 			break;
 
 		case MoveType_Right:
-			GetCharacter()->m_Core.m_Pos.x += 5;
+			GetCharacter()->m_Core.m_Pos.x += Speed - m_AttackerMoveForce;
 			break;
 
 		case MoveType_Down:
-			GetCharacter()->m_Core.m_Pos.y += 5;
+			GetCharacter()->m_Core.m_Pos.y += Speed - m_AttackerMoveForce;
 			break;
 
 		case MoveType_Left:
-			GetCharacter()->m_Core.m_Pos.x -= 5;
+			GetCharacter()->m_Core.m_Pos.x -= Speed - m_AttackerMoveForce;
 			break;
 
 		case MoveType_Random:
@@ -150,6 +151,9 @@ void CPlayer::Tick()
 		default:
 			break;
 		}
+
+		if(m_AttackerMoveForce)
+			m_AttackerMoveForce-=0.07;
 	}
 
 	Server()->SetClientScore(m_ClientID, m_Score);

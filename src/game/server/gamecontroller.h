@@ -4,7 +4,7 @@
 #define GAME_SERVER_GAMECONTROLLER_H
 
 #include <base/vmath.h>
-
+#include "entities/tower-defense/tower.h"
 #ifdef _MSC_VER
 typedef __int32 int32_t;
 typedef unsigned __int32 uint32_t;
@@ -92,6 +92,8 @@ public:
 
 	bool IsForceBalanced();
 
+	CTower *GetTower();
+	
 	/*
 
 	*/
@@ -161,6 +163,9 @@ public:
 	int m_Copper[2];
 	int m_Lead[2];
 	int m_Coal[2];
+
+private:
+	CTower *m_pTower;
 };
 
 #endif

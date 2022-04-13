@@ -251,6 +251,7 @@ public:
 	virtual int* GetIdMap(int ClientID);
 	virtual void SetCustClt(int ClientID);
 	virtual void InitClientBot(int ClientID);
+	virtual void Reload();
 };
 
 #endif

@@ -16,8 +16,8 @@ enum
     AMMOTYPE_Dmg, // Done.
     AMMOTYPE_Force, // Done.
     AMMOTYPE_Fire, // Done.
-    AMMOTYPE_Slime, // WIP: Slow motion for Target Tee.
-    AMMOTYPE_Freeze, // WIP: Freeze you Target Tee.
+    AMMOTYPE_Slime, // WIP: Slow motion for Target Attacker.
+    AMMOTYPE_Freeze, // WIP: Freeze you Target Attacker.
 
     AMMOTYPE_END,
 
@@ -30,10 +30,10 @@ enum
     // Damage
     AMMOPRICE_Copper_Dmg = 2,
     
-    // Break Defense
-    AMMOPRICE_Lead_Force = 5,
+    // Force
+    AMMOPRICE_Lead_Force = 0,
     
-    // Fire
+    // Explosion
     AMMOPRICE_Lead_Fire = 5,
     AMMOPRICE_Coal_Fire = 3,
     

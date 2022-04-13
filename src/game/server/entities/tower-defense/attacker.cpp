@@ -29,7 +29,9 @@ CAttacker::CAttacker(CGameWorld *pWorld)
 
 void CAttacker::Tick()
 {
-	TickBotAI();
+    if(GameServer()->m_pController->IsGameOver())
+        return;
+    TickBotAI();
 	CCharacter::Tick();
 }
 
@@ -91,9 +93,36 @@ void CAttacker::TickBotAI()
     //Interact with users
     bool PlayerClose = false;
     bool PlayerFound = false;
+    bool TowerFound = false;
+
+    int DistTower = distance(GameServer()->m_TowerPos, m_Pos);
+    if(DistTower <= 500)
+    {
+        TowerFound = true;
+        vec2 DirPlayer = normalize(GameServer()->m_TowerPos - m_Pos);
+        if (DirPlayer.x < 0)
+            m_BotDir = -1;
+        else
+            m_BotDir = 1;
+        if(m_aWeapons[WEAPON_GUN].m_Ammo)
+        {
+            m_ActiveWeapon = WEAPON_GUN;
+            m_aWeapons[WEAPON_GUN].m_Ammo++;
+        }
+        
+        m_BotClientIDFix = GetPlayer()->GetCID();
+
+        m_Input.m_TargetX = static_cast<int>(GameServer()->m_TowerPos.x - m_Pos.x);
+        m_Input.m_TargetY = static_cast<int>(GameServer()->m_TowerPos.y - m_Pos.y);
+
+        m_LatestInput.m_Fire = m_Input.m_Fire = 1;
+    }
+    else
+        TowerFound = false;
     float LessDist = 500.0f;
 
     m_BotClientIDFix = -1;
+    
 	for (int i=0; i<MAX_CLIENTS; i++)
 	{
 	    CPlayer *pPlayer = GameServer()->m_apPlayers[i];
@@ -106,7 +135,7 @@ void CAttacker::TickBotAI()
         else
             continue;
 
-        if (Dist < 320.0f && !GameServer()->Collision()->IntersectLine(pPlayer->GetCharacter()->m_Pos, m_Pos, NULL, NULL))
+        if (Dist < 320.0f && !GameServer()->Collision()->IntersectLine(pPlayer->GetCharacter()->m_Pos, m_Pos, NULL, NULL) && !TowerFound)
         {
             vec2 DirPlayer = normalize(pPlayer->GetCharacter()->m_Pos - m_Pos);
             if (DirPlayer.x < 0)

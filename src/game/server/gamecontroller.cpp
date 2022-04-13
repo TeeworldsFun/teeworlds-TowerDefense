@@ -128,7 +128,7 @@ bool IGameController::OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P1, 
 
 	if(str_comp(pName, "redTower") == 0)
 	{
-		new CTower(&GameServer()->m_World, Pos, TEAM_RED);
+		m_pTower = new CTower(&GameServer()->m_World, Pos, TEAM_RED);
 		GameServer()->m_TowerPos = Pos;
 		m_aaSpawnPoints[1][m_aNumSpawnPoints[1]++] = Pos;
 	}
@@ -746,4 +746,11 @@ int IGameController::ClampTeam(int Team)
 double IGameController::GetTime()
 {
 	return static_cast<double>(Server()->Tick() - m_RoundStartTick)/Server()->TickSpeed();
+}
+
+CTower *IGameController::GetTower()
+{
+	if(m_pTower)
+		return m_pTower;
+	return 0;
 }
