@@ -26,7 +26,6 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team, int Attacker
 	m_MiningType = MINETYPE_NONE;
 	m_InBase = false;
 	m_AmmoType = AMMOTYPE_NONE;
-
 	m_AttackerType = AttackerType;
 
 	if(AttackerType)
@@ -89,6 +88,68 @@ void CPlayer::Tick()
 
 		if(m_Coal)
 		{	GameServer()->m_pController->m_Coal[GetTeam()]+=m_Coal;	m_Coal = 0;}
+	}
+
+	if(IsAttacker && GetCharacter())
+	{	
+		int Index = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_Bots, GetCharacter()->m_Pos);
+	    if(Index == ZONE_BOT_UP)
+   	 	{
+    	    m_BotMoveState = MoveType_Up;
+ 	   	} 
+	    else if(Index == ZONE_BOT_RIGHT)
+    	{
+        	m_BotMoveState = MoveType_Right;
+    	}
+    	else if(Index == ZONE_BOT_DOWN)
+    	{
+    	    m_BotMoveState = MoveType_Down;
+    	}
+    	else if(Index == ZONE_BOT_LEFT)
+    	{
+        	m_BotMoveState = MoveType_Left;
+    	}
+		else if(Index == ZONE_BOT_STOP)
+		{
+			m_BotMoveState = MoveType_STOP;
+		}
+		else if(Index == ZONE_BOT_RANDOM)
+		{
+			m_BotMoveState = MoveType_Random;
+		}
+		
+
+		GetCharacter()->m_Core.m_Vel.x = 0.0f;
+		GetCharacter()->m_Core.m_Vel.y = 0.0f;
+	
+
+		switch (m_BotMoveState)
+		{
+		case MoveType_Up:
+			GetCharacter()->m_Core.m_Pos.y -= 5;
+			break;
+
+		case MoveType_Right:
+			GetCharacter()->m_Core.m_Pos.x += 5;
+			break;
+
+		case MoveType_Down:
+			GetCharacter()->m_Core.m_Pos.y += 5;
+			break;
+
+		case MoveType_Left:
+			GetCharacter()->m_Core.m_Pos.x -= 5;
+			break;
+
+		case MoveType_Random:
+			m_BotMoveState = rand()%4;
+		
+		case MoveType_STOP:
+			//STOP!
+			break;
+		default:
+			break;
+		}
 	}
 
 	Server()->SetClientScore(m_ClientID, m_Score);

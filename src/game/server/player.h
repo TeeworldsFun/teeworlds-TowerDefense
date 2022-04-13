@@ -242,6 +242,7 @@ public:
 public:
 	bool IsAttacker;
 	int m_AttackerType; // 0 = not attacker.
+	int m_BotMoveState;
 public:
 	CTuningParams* GetNextTuningParams() { return &m_NextTuningParams; };
 };

@@ -1713,7 +1713,7 @@ void CGameContext::OnInit(/*class IKernel *pKernel*/)
 
 	//Get zones
 	m_ZoneHandle_TeeWorlds = m_Collision.GetZoneHandle("teeworlds");
-	m_ZoneHandle_Bots = m_Collision.GetZoneHandle("handleBotAction");
+	m_ZoneHandle_Bots = m_Collision.GetZoneHandle("botmove");
 
 	// reset everything here
 	//world = new GAMEWORLD;

@@ -63,11 +63,12 @@ enum
 // Move Type.
 enum
 {
+    MoveType_STOP,
     MoveType_Up,
     MoveType_Right,
     MoveType_Down,
     MoveType_Left,
-
+    MoveType_Random,
     END_MoveType,
 
     NUM_MoveType = END_MoveType - 1,

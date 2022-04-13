@@ -24,6 +24,7 @@ CAttacker::CAttacker(CGameWorld *pWorld)
 	m_BotClientIDFix = -1;
 	m_BotTimeLastSound = Server()->Tick();
 	m_BotJumpTry = false;
+	m_BotMoveState = MoveType_Left;
 }
 
 void CAttacker::Tick()
@@ -129,35 +130,7 @@ void CAttacker::TickBotAI()
         }
 
 
-        int Index = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_TeeWorlds, m_Pos);
-        if(Index == ZONE_BOT_UP)
-        {
-            m_BotMoveState = MoveType_Up;
-        } 
-        else if(Index == ZONE_BOT_RIGHT)
-        {
-            m_BotMoveState = MoveType_Right;
-        }
-        else if(Index == ZONE_BOT_DOWN)
-        {
-            m_BotMoveState = MoveType_Down;
-        }
-        else if(Index == ZONE_BOT_LEFT)
-        {
-            m_BotMoveState = MoveType_Left;
-        }
-
-        switch (m_BotMoveState)
-        {
-        case MoveType_Up:
-            m_Pos.y -= 0.01;
-            break;
-        
-        default:
-            break;
-        }
-	}
-
+    }
     //Fix target
     if (!PlayerFound)
     {
