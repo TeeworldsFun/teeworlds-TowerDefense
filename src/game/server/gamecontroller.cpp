@@ -43,6 +43,9 @@ IGameController::IGameController(class CGameContext *pGameServer)
 	m_Copper[TEAM_BLUE] = 0;
 	m_Lead[TEAM_BLUE] = 0;
 	m_Coal[TEAM_BLUE] = 0;
+
+	m_pTower[0] = 0;
+	m_pTower[1] = 0;
 }
 
 IGameController::~IGameController()
@@ -128,15 +131,16 @@ bool IGameController::OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P1, 
 
 	if(str_comp(pName, "redTower") == 0)
 	{
-		m_pTower = new CTower(&GameServer()->m_World, Pos, TEAM_RED);
-		GameServer()->m_TowerPos = Pos;
+		GameServer()->m_TowerPos[0] = Pos;
 		m_aaSpawnPoints[1][m_aNumSpawnPoints[1]++] = Pos;
 	}
 	else if(str_comp(pName, "blueTower") == 0)
 	{
-		new CTower(&GameServer()->m_World, Pos, TEAM_BLUE);
+		GameServer()->m_TowerPos[1] = Pos;
 		m_aaSpawnPoints[2][m_aNumSpawnPoints[2]++] = Pos;
 	}
+
+	InitTower();
 
 	if(Type != -1)
 	{
@@ -198,8 +202,18 @@ void IGameController::StartRound()
 	char aBuf[256];
 	str_format(aBuf, sizeof(aBuf), "start round type='%s' teamplay='%d'", m_pGameType, m_GameFlags&GAMEFLAG_TEAMS);
 	GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_DEBUG, "game", aBuf);
+
+	InitTower();
 }
 
+void IGameController::InitTower()
+{
+	if(m_pTower[0] || m_pTower[1])
+		return;
+
+	m_pTower[0] = new CTower(&GameServer()->m_World, GameServer()->m_TowerPos[0], TEAM_RED);
+	m_pTower[1] = new CTower(&GameServer()->m_World, GameServer()->m_TowerPos[1], TEAM_BLUE);
+}
 void IGameController::ChangeMap(const char *pToMap)
 {
 	str_copy(m_aMapWish, pToMap, sizeof(m_aMapWish));
@@ -391,7 +405,7 @@ bool IGameController::IsFriendlyFire(int ClientID1, int ClientID2)
 	if(GameServer()->m_apPlayers[ClientID1]->GetTeam() == GameServer()->m_apPlayers[ClientID2]->GetTeam())
 		return true;
 
-	return false;
+	return true;
 }
 
 bool IGameController::IsForceBalanced()
@@ -437,6 +451,8 @@ void IGameController::Tick()
 			GameServer()->m_World.m_Paused = false;
 	}
 
+	if(GetTower()->GetHealth() <= 0 && m_GameOverTick == -1)
+		EndRound();
 	// game is Paused
 	if(GameServer()->m_World.m_Paused)
 		++m_RoundStartTick;
@@ -736,7 +752,8 @@ double IGameController::GetTime()
 
 CTower *IGameController::GetTower()
 {
-	if(m_pTower)
-		return m_pTower;
+	if(m_pTower[0])
+		return m_pTower[0];
+	dbg_msg("!","!0");
 	return 0;
 }

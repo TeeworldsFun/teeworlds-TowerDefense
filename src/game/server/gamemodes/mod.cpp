@@ -19,3 +19,9 @@ void CGameControllerMOD::Tick()
 
 	IGameController::Tick();
 }
+
+void CGameControllerMOD::EndRound()
+{
+	GetTower()->Reset();
+	IGameController::EndRound();
+}

@@ -74,7 +74,7 @@ void CProjectile::Tick()
 
 	m_LifeSpan--;
 
-	if(TargetChr || Collide || m_LifeSpan < 0 || GameLayerClipped(CurPos) || distance(GameServer()->m_TowerPos, CurPos) <= 200)
+	if(TargetChr || Collide || m_LifeSpan < 0 || GameLayerClipped(CurPos) || distance(GameServer()->m_TowerPos[0], CurPos) <= 200)
 	{
 		if(m_LifeSpan >= 0 || m_Weapon == WEAPON_GRENADE)
 			GameServer()->CreateSound(CurPos, m_SoundImpact);
@@ -85,7 +85,7 @@ void CProjectile::Tick()
 		else if(TargetChr)
 			TargetChr->TakeDamage(m_Direction * max(0.001f, m_Force), m_Damage, m_Owner, m_Weapon);
 
-		else if(distance(GameServer()->m_TowerPos, CurPos) <= 200 && m_Owner > MAX_PLAYERS)
+		else if(distance(GameServer()->m_TowerPos[0], CurPos) <= 200)
 		{
 			GameServer()->m_pController->GetTower()->TakeDamage(m_Damage);
 		}

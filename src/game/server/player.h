@@ -14,7 +14,7 @@ class CPlayer
 	MACRO_ALLOC_POOL_ID()
 
 public:
-	CPlayer(CGameContext *pGameServer, int ClientID, int Team, int AttackerType);
+	CPlayer(CGameContext *pGameServer, int ClientID, int Team);
 	~CPlayer();
 
 	void Init(int CID);
@@ -22,7 +22,7 @@ public:
 	void TryRespawn();
 	void Respawn();
 	void SetTeam(int Team, bool DoChatMsg=true);
-	int GetTeam() const { return m_AttackerType; };
+	int GetTeam() const { return m_Team; };
 	int GetCID() const { return m_ClientID; };
 
 	void Tick();
@@ -239,11 +239,11 @@ public:
 	int m_Lead;
 	int m_Coal;
 
-public:
+/*public:
 	bool IsAttacker;
 	int m_AttackerType; // 0 = not attacker.
 	int m_BotMoveState;
-	int m_AttackerMoveForce;
+	int m_AttackerMoveForce;*/
 public:
 	CTuningParams* GetNextTuningParams() { return &m_NextTuningParams; };
 };

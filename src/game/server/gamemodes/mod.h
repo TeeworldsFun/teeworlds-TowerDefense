@@ -11,6 +11,7 @@ class CGameControllerMOD : public IGameController
 public:
 	CGameControllerMOD(class CGameContext *pGameServer);
 	virtual void Tick();
+	virtual void EndRound();
 	// add more virtual functions here if you wish
 };
 #endif

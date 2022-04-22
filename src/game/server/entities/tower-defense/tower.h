@@ -11,7 +11,6 @@ class CTower : public CEntity
 public:
     CTower(CGameWorld *pGameWorld, vec2 Pos, int Team);
 
-    CTowerSign *m_apTowerSigns;
 
     virtual void Reset();
 	virtual void Tick();
@@ -21,7 +20,9 @@ public:
     void LevelUpgrade();
     bool Warning();
 
+    int GetHealth() { return m_Health; };
 private:
+    CTowerSign *m_pTowerSigns[MAX_LEVEL];
     int m_Health;
     int m_aIDs[9];
     int m_lIDs[9];

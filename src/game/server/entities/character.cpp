@@ -268,7 +268,7 @@ void CCharacter::FireWeapon()
 		return;
 
 	// check for ammo
-	if(!m_aWeapons[m_ActiveWeapon].m_Ammo || !GetPlayer()->FireAmmo(GetPlayer()->m_AmmoType))
+	if(!m_aWeapons[m_ActiveWeapon].m_Ammo || (!GetPlayer()->FireAmmo(GetPlayer()->m_AmmoType) && !GetPlayer()->FireMines(GetPlayer()->m_AmmoType)))
 	{
 		// 125ms is a magical limit of how fast a human can click
 		m_ReloadTimer = 125 * Server()->TickSpeed() / 1000;
@@ -813,7 +813,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 	m_EmoteType = EMOTE_PAIN;
 	m_EmoteStop = Server()->Tick() + 500 * Server()->TickSpeed() / 1000;
 
-	if(GameServer()->m_apPlayers[From]->m_AmmoType == AMMOTYPE_Force && GetPlayer()->GetCID() > MAX_PLAYERS)
+	/*if(GameServer()->m_apPlayers[From]->m_AmmoType == AMMOTYPE_Force && GetPlayer()->GetCID() > MAX_PLAYERS)
     {
 		if(Weapon == WEAPON_SHOTGUN)
 			GetPlayer()->m_AttackerMoveForce += 5;
@@ -827,7 +827,7 @@ bool CCharacter::TakeDamage(vec2 Force, int Dmg, int From, int Weapon)
 			GetPlayer()->m_AttackerMoveForce += 20;
 		if(Weapon == WEAPON_HAMMER)
 			GetPlayer()->m_AttackerMoveForce += 30;
-	}
+	}*/
 
 	return true;
 }

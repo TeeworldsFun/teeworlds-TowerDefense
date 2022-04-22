@@ -5,6 +5,22 @@ PlayerFlags = ["PLAYING", "IN_MENU", "CHATTING", "SCOREBOARD"]
 GameFlags = ["TEAMS", "FLAGS"]
 GameStateFlags = ["GAMEOVER", "SUDDENDEATH", "PAUSED"]
 
+GameInfoFlags = [
+	"TIMESCORE", "GAMETYPE_RACE", "GAMETYPE_FASTCAP", "GAMETYPE_FNG",
+	"GAMETYPE_DDRACE", "GAMETYPE_DDNET", "GAMETYPE_BLOCK_WORLDS",
+	"GAMETYPE_VANILLA", "GAMETYPE_PLUS", "FLAG_STARTS_RACE", "RACE",
+	"UNLIMITED_AMMO", "DDRACE_RECORD_MESSAGE", "RACE_RECORD_MESSAGE",
+	"ALLOW_EYE_WHEEL", "ALLOW_HOOK_COLL", "ALLOW_ZOOM", "BUG_DDRACE_GHOST",
+	"BUG_DDRACE_INPUT", "BUG_FNG_LASER_RANGE", "BUG_VANILLA_BOUNCE",
+	"PREDICT_FNG", "PREDICT_DDRACE", "PREDICT_DDRACE_TILES", "PREDICT_VANILLA",
+	"ENTITIES_DDNET", "ENTITIES_DDRACE", "ENTITIES_RACE", "ENTITIES_FNG",
+	"ENTITIES_VANILLA", "DONT_MASK_ENTITIES", "ENTITIES_BW"
+	# Full, use GameInfoFlags2 for more flags
+]
+GameInfoFlags2 = [
+	"ALLOW_X_SKINS", "GAMETYPE_CITY", "GAMETYPE_FDDRACE", "ENTITIES_FDDRACE",
+]
+
 Emoticons = ["OOP", "EXCLAMATION", "HEARTS", "DROP", "DOTDOT", "MUSIC", "SORRY", "GHOST", "SUSHI", "SPLATTEE", "DEVILTEE", "ZOMG", "ZZZ", "WTF", "EYES", "QUESTION"]
 
 Powerups = ["HEALTH", "ARMOR", "WEAPON", "NINJA"]
@@ -46,7 +62,9 @@ Enums = [
 Flags = [
 	Flags("PLAYERFLAG", PlayerFlags),
 	Flags("GAMEFLAG", GameFlags),
-	Flags("GAMESTATEFLAG", GameStateFlags)
+	Flags("GAMESTATEFLAG", GameStateFlags),
+	Flags("GAMEINFOFLAG", GameInfoFlags),
+	Flags("GAMEINFOFLAG2", GameInfoFlags2)
 ]
 
 Objects = [
@@ -341,4 +359,6 @@ Messages = [
 		NetStringStrict("m_Reason"),
 	]),
 	NetMessage("Cl_IsDDRace64", []),
+	NetMessage("Cl_IsTeeIndustry", []),
+	NetMessage("Cl_IsDDNetLegacy", []),
 ]

@@ -210,7 +210,7 @@ public:
 
 	void CreateAttacker(int Type, int ClientID);
 	int CountPlayerNum();
-	vec2 m_TowerPos;
+	vec2 m_TowerPos[2];
 };
 
 inline int64_t CmaskAll() { return -1LL; }

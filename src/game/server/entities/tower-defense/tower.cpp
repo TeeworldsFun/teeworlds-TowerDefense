@@ -34,9 +34,9 @@ CTower::CTower(CGameWorld *pGameWorld, vec2 Pos, int Team)
     GameWorld()->InsertEntity(this);
 
     for(int i = 0;i < MAX_LEVEL;i++)
-    new CTowerSign(pGameWorld, Pos, Team, i, 200);
+        m_pTowerSigns[i] = new CTowerSign(pGameWorld, Pos, Team, i, 200);
 
-    m_Health = 5000;
+    m_Health = 1;
 }
 
 void CTower::LevelUpgrade()
@@ -92,6 +92,9 @@ void CTower::Reset()
 			m_lIDs3[i] = -1;
 		}
 	}
+    
+    for(int i=0;i<MAX_LEVEL;i++)
+        delete m_pTowerSigns[i];
 }
 
 void CTower::Tick()
@@ -107,7 +110,7 @@ void CTower::Tick()
         CCharacter *Character = GameServer()->m_apPlayers[i]->GetCharacter();
         CPlayer *m_pPlayer = GameServer()->m_apPlayers[i];
         
-        if(distance(m_Pos, GameServer()->m_apPlayers[i]->GetCharacter()->m_Pos) < 230)
+        if(distance(m_Pos, GameServer()->m_apPlayers[i]->GetCharacter()->m_Pos) < 230 && Character->IsAlive())
         {
             GameServer()->m_apPlayers[i]->m_InBase = true;
             if(GameServer()->m_apPlayers[i]->GetTeam() == m_Team)
@@ -133,11 +136,6 @@ void CTower::Tick()
                     "coal", &Coal, NULL);
                 }
             }
-            else if(GameServer()->m_apPlayers[i]->IsAttacker)
-            {
-                GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseHealth(1);
-                GameServer()->m_apPlayers[i]->GetCharacter()->IncreaseArmor(1);
-            }
             else
             {
                 InAttackerTowerTick[i]++;
@@ -155,11 +153,9 @@ void CTower::Tick()
 
 void CTower::TakeDamage(int Dmg)
 {
-    m_Health -= Dmg;
     if(m_Health <= 0)
-    {
-        GameServer()->Server()->Reload();
-    }
+        return;
+    m_Health -= Dmg;
 }
 
 void CTower::Snap(int SnappingClient)

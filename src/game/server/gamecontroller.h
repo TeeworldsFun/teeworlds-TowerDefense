@@ -88,6 +88,8 @@ public:
 	void EndRound();
 	void ChangeMap(const char *pToMap);
 
+	void InitTower();
+
 	bool IsFriendlyFire(int ClientID1, int ClientID2);
 
 	bool IsForceBalanced();
@@ -165,7 +167,7 @@ public:
 	int m_Coal[2];
 
 private:
-	CTower *m_pTower;
+	CTower *m_pTower[2];
 };
 
 #endif

@@ -4,13 +4,12 @@
 #include <engine/shared/config.h>
 #include "player.h"
 #include "Types.h"
-#include "entities/tower-defense/attacker.h"
 
 MACRO_ALLOC_POOL_ID_IMPL(CPlayer, MAX_CLIENTS)
 
 IServer *CPlayer::Server() const { return m_pGameServer->Server(); }
 
-CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team, int AttackerType)
+CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 {
 	m_pGameServer = pGameServer;
 	m_RespawnTick = Server()->Tick();
@@ -26,11 +25,6 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team, int Attacker
 	m_MiningType = MINETYPE_NONE;
 	m_InBase = false;
 	m_AmmoType = AMMOTYPE_NONE;
-	m_AttackerType = AttackerType;
-
-	if(AttackerType)
-		IsAttacker = true;
-	m_AttackerMoveForce = 0;
 	SetLanguage(Server()->GetClientLanguage(ClientID));
 
 	m_Authed = IServer::AUTHED_NO;
@@ -91,7 +85,7 @@ void CPlayer::Tick()
 		{	GameServer()->m_pController->m_Coal[GetTeam()]+=m_Coal;	m_Coal = 0;}
 	}
 
-	if(IsAttacker && GetCharacter() && GameServer()->CountPlayerNum()>=1)
+/*	if(IsAttacker && GetCharacter() && GameServer()->CountPlayerNum()>=1)
 	{
 		int Index = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_Bots, GetCharacter()->m_Pos);
 	    if(Index == ZONE_BOT_UP)
@@ -154,7 +148,7 @@ void CPlayer::Tick()
 
 		if(m_AttackerMoveForce)
 			m_AttackerMoveForce-=0.07;
-	}
+	}*/
 
 	Server()->SetClientScore(m_ClientID, m_Score);
 	Server()->SetClientLanguage(m_ClientID, m_aLanguage);
@@ -455,24 +449,13 @@ void CPlayer::TryRespawn()
 {
 	vec2 SpawnPos;
 
-	if(IsAttacker)
-	{
-		if(!GameServer()->m_pController->CanSpawn(0, &SpawnPos))
-			return;
-	}
-	else
-		if(!GameServer()->m_pController->CanSpawn(1, &SpawnPos))
-			return;
+	if(!GameServer()->m_pController->CanSpawn(1, &SpawnPos))
+		return;
 
 	m_InBase = false;
 	m_Spawning = false;
 
-	if(IsAttacker && m_AttackerType == AttackerType_Dagger)
-	{
-		m_pCharacter = new(m_ClientID) CAttacker(&GameServer()->m_World);
-	}
-	else
-		m_pCharacter = new(m_ClientID) CCharacter(&GameServer()->m_World);
+	m_pCharacter = new(m_ClientID) CCharacter(&GameServer()->m_World);
 	m_pCharacter->Spawn(this, SpawnPos);
 	GameServer()->CreatePlayerSpawn(SpawnPos);
 }

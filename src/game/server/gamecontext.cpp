@@ -613,7 +613,7 @@ void CGameContext::OnClientConnected(int ClientID)
 	// Check which team the player should be on
 	const int StartTeam = g_Config.m_SvTournamentMode ? TEAM_SPECTATORS : m_pController->GetAutoTeam(ClientID);
 
-	m_apPlayers[ClientID] = new(ClientID) CPlayer(this, ClientID, StartTeam, AttackerType_None);
+	m_apPlayers[ClientID] = new(ClientID) CPlayer(this, ClientID, StartTeam);
 	//players[client_id].init(client_id);
 	//players[client_id].client_id = client_id;
 
@@ -1867,10 +1867,10 @@ bool CGameContext::IsClientPlayer(int ClientID)
 
 void CGameContext::CreateAttacker(int Type, int ClientID)
 {
-	switch (Type)
+/*	switch (Type)
 	{
 	case AttackerType_Dagger:
-		m_apPlayers[ClientID] = new(ClientID) CPlayer(this, ClientID, TEAM_RED, AttackerType_Dagger);
+		m_apPlayers[ClientID] = new(ClientID) CPlayer(this, ClientID, TEAM_RED);
 		str_copy(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName, "saddo", sizeof(m_apPlayers[ClientID]->m_TeeInfos.m_SkinName));
 		Server()->SetClientName(ClientID, "Dagger");
 		break;
@@ -1879,7 +1879,7 @@ void CGameContext::CreateAttacker(int Type, int ClientID)
 		break;
 	}
 
-	Server()->InitClientBot(ClientID);
+	Server()->InitClientBot(ClientID);*/
 }
 
 int CGameContext::CountPlayerNum()

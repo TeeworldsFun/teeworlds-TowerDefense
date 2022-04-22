@@ -46,11 +46,11 @@ R partition_binary(R range, T value)
 
 	while(range.size() > 1)
 	{
-		unsigned pivot = (range.size()-1)/2;
+		unsigned pivot = (range.size() - 1) / 2;
 		if(range.index(pivot) < value)
-			range = range.slice(pivot+1, range.size()-1);
+			range = range.slice(pivot + 1, range.size() - 1);
 		else
-			range = range.slice(0, pivot+1);
+			range = range.slice(0, pivot + 1);
 	}
 	return range;
 }
@@ -69,12 +69,13 @@ R find_linear(R range, T value)
 template<class R, class T>
 R find_binary(R range, T value)
 {
-	range = partition_linear(range, value);
-	if(range.empty()) return range;
-	if(range.front() == value) return range;
+	range = partition_binary(range, value);
+	if(range.empty())
+		return range;
+	if(range.front() == value)
+		return range;
 	return R();
 }
-
 
 template<class R>
 void sort_bubble(R range)
