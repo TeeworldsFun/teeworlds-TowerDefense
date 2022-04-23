@@ -25,6 +25,8 @@ void CTowerSign::Reset()
 
 void CTowerSign::Tick()
 {
+	m_Pos = GameServer()->m_TowerPos[m_Team];
+	m_Pos1 = GameServer()->m_TowerPos[m_Team];
 	m_Pos = m_Pos1 + (GetDir(m_Degres*M_PIl/180) * m_Distance);
 	if ( m_Degres + 1 < 360 )
 		m_Degres += 1;

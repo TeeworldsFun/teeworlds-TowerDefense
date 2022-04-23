@@ -165,9 +165,8 @@ public:
 	int m_Copper[2];
 	int m_Lead[2];
 	int m_Coal[2];
-
-private:
 	CTower *m_pTower[2];
+	bool m_TowerReset;
 };
 
 #endif

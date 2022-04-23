@@ -46,6 +46,8 @@ IGameController::IGameController(class CGameContext *pGameServer)
 
 	m_pTower[0] = 0;
 	m_pTower[1] = 0;
+
+	m_TowerReset = false;
 }
 
 IGameController::~IGameController()
@@ -160,6 +162,7 @@ void IGameController::EndRound()
 	GameServer()->m_World.m_Paused = true;
 	m_GameOverTick = Server()->Tick();
 	m_SuddenDeath = 0;
+	m_TowerReset = false;
 }
 
 void IGameController::ResetGame()
@@ -203,16 +206,24 @@ void IGameController::StartRound()
 	str_format(aBuf, sizeof(aBuf), "start round type='%s' teamplay='%d'", m_pGameType, m_GameFlags&GAMEFLAG_TEAMS);
 	GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_DEBUG, "game", aBuf);
 
+	if(!m_TowerReset)
+	{
+		if(m_pTower[0])
+			m_pTower[0]->Reset();
+		if(m_pTower[1])
+			m_pTower[1]->Reset();
+	}
 	InitTower();
 }
 
 void IGameController::InitTower()
 {
-	if(m_pTower[0] || m_pTower[1])
+	if(m_TowerReset)
 		return;
-
 	m_pTower[0] = new CTower(&GameServer()->m_World, GameServer()->m_TowerPos[0], TEAM_RED);
 	m_pTower[1] = new CTower(&GameServer()->m_World, GameServer()->m_TowerPos[1], TEAM_BLUE);
+	m_TowerReset = true;
+	dbg_msg("FUCK YOU","FUCK DAMN");
 }
 void IGameController::ChangeMap(const char *pToMap)
 {
@@ -437,7 +448,7 @@ void IGameController::Tick()
 	if(m_GameOverTick != -1)
 	{
 		// game over.. wait for restart
-		if(Server()->Tick() > m_GameOverTick+Server()->TickSpeed()*10)
+		if(Server()->Tick() > m_GameOverTick+100)
 		{
 			CycleMap();
 			StartRound();

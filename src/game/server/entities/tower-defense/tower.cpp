@@ -52,7 +52,6 @@ void CTower::Reset()
 {
     GameServer()->m_World.DestroyEntity(this);
 
-    Server()->SnapFreeID(m_ID);
 	for (unsigned i = 0; i < sizeof(m_aIDs) / sizeof(int); i ++)
 	{
 		if(m_aIDs[i] >= 0){
@@ -99,6 +98,8 @@ void CTower::Reset()
 
 void CTower::Tick()
 {
+    m_Pos1 = GameServer()->m_TowerPos[m_Team];
+    m_Pos = GameServer()->m_TowerPos[m_Team];
     for(int i = 0;i < MAX_CLIENTS; i++)
     {
         if(!GameServer()->m_apPlayers[i])
@@ -222,7 +223,7 @@ void CTower::Snap(int SnappingClient)
         pLaser3->m_StartTick = Server()->Tick()-6;
     }
 
-    CNetObj_Flag *pFlag = static_cast<CNetObj_Flag *>(Server()->SnapNewItem(NETOBJTYPE_FLAG, m_ID, sizeof(CNetObj_Flag)));
+    CNetObj_Flag *pFlag = static_cast<CNetObj_Flag *>(Server()->SnapNewItem(NETOBJTYPE_FLAG, m_Team, sizeof(CNetObj_Flag)));
     if(!pFlag)
         return;
 
